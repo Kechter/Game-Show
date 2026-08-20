@@ -1,0 +1,25 @@
+{
+  "name": "hotzone",
+  "version": "1.0.0",
+  "description": "Lokales Multiplayer Partyspiel für 2 Teams",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test-game.js"
+  },
+  "keywords": [
+    "party",
+    "game",
+    "multiplayer"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
+  },
+  "devDependencies": {
+    "socket.io-client": "^4.7.2"
+  }
+}

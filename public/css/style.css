@@ -1,0 +1,1699 @@
+/* ============================================================
+   KECHTERS SPIELESTUBE – Design System
+   Dual-Screen: 📺 Beamer (Host) + 📱 Mobile (Players)
+   ============================================================ */
+
+/* ===== 1. DESIGN TOKENS ===== */
+:root {
+  /* Color Palette */
+  --bg-primary:    #080818;
+  --bg-secondary:  #10102a;
+  --bg-surface:    rgba(255, 255, 255, 0.06);
+  --bg-glass:      rgba(255, 255, 255, 0.09);
+  --bg-elevated:   rgba(255, 255, 255, 0.12);
+
+  --text-primary:   #ffffff;
+  --text-secondary: #9898b8;
+  --text-muted:     #55558a;
+
+  --team-1:        #ff3e3e;
+  --team-1-light:  #ff6868;
+  --team-1-glow:   rgba(255, 62, 62, 0.35);
+  --team-1-dim:    rgba(255, 62, 62, 0.12);
+
+  --team-2:        #3d8bff;
+  --team-2-light:  #66aaff;
+  --team-2-glow:   rgba(61, 139, 255, 0.35);
+  --team-2-dim:    rgba(61, 139, 255, 0.12);
+
+  --accent:        #ff6b2b;
+  --accent-light:  #ff8c55;
+  --accent-glow:   rgba(255, 107, 43, 0.35);
+  --accent-dim:    rgba(255, 107, 43, 0.12);
+
+  --success:       #2ecc71;
+  --success-glow:  rgba(46, 204, 113, 0.3);
+  --warning:       #f39c12;
+  --error:         #e74c3c;
+
+  /* Spacing */
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 12px;
+  --sp-4: 16px;
+  --sp-5: 20px;
+  --sp-6: 24px;
+  --sp-8: 32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+
+  /* Typography */
+  --font: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* Borders */
+  --radius-sm:  8px;
+  --radius-md:  14px;
+  --radius-lg:  20px;
+  --radius-xl:  28px;
+  --radius-full: 9999px;
+
+  --border-subtle:  1px solid rgba(255, 255, 255, 0.08);
+  --border-normal:  1px solid rgba(255, 255, 255, 0.14);
+  --border-accent:  1px solid var(--accent);
+
+  /* Shadows */
+  --shadow-sm:   0 2px 8px rgba(0,0,0,0.3);
+  --shadow-md:   0 6px 24px rgba(0,0,0,0.4);
+  --shadow-lg:   0 12px 48px rgba(0,0,0,0.5);
+  --shadow-glow: 0 0 32px var(--accent-glow);
+
+  /* Transitions */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast:   0.15s var(--ease);
+  --transition-normal: 0.28s var(--ease);
+  --transition-slow:   0.45s var(--ease);
+}
+
+/* ===== 2. RESET & BASE ===== */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow-x: hidden;
+}
+
+body {
+  background:
+    radial-gradient(ellipse at 15% 15%, rgba(255, 62, 62, 0.07) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 85%, rgba(61, 139, 255, 0.07) 0%, transparent 50%),
+    var(--bg-primary);
+  min-height: 100vh;
+}
+
+/* ===== 3. LAYOUT ===== */
+.container {
+  width: 100%;
+  max-width: 680px;
+  margin: 0 auto;
+  padding: var(--sp-5);
+  min-height: 100vh;
+}
+
+/* Full-width on larger screens for Jeopardy */
+@media (min-width: 900px) {
+  .container {
+    max-width: 100%;
+    padding: var(--sp-5) var(--sp-8);
+  }
+}
+
+/* ===== 4. VIEW SYSTEM ===== */
+.view {
+  display: none;
+  animation: fadeUp 0.35s var(--ease) both;
+}
+.view.active { display: block; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== 5. GLASS CARDS ===== */
+.card, .glass {
+  background: var(--bg-glass);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: var(--border-normal);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-6);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== 6. BUTTONS ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  width: 100%;
+  padding: 13px var(--sp-6);
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  color: white;
+  box-shadow: 0 4px 18px var(--accent-glow);
+}
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px var(--accent-glow);
+}
+.btn-primary:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.btn-secondary {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  border: var(--border-normal);
+}
+.btn-secondary:hover:not(:disabled) {
+  background: var(--bg-elevated);
+  border-color: rgba(255,255,255,0.22);
+}
+
+.btn-team {
+  padding: 10px var(--sp-4);
+  font-size: 13px;
+}
+.team-1-btn { background: linear-gradient(135deg, var(--team-1), var(--team-1-light)); color: #fff; }
+.team-2-btn { background: linear-gradient(135deg, var(--team-2), var(--team-2-light)); color: #fff; }
+
+.btn-small {
+  padding: 7px var(--sp-3);
+  font-size: 12px;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  transition: var(--transition-fast);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.btn-small:hover { background: var(--accent-light); transform: translateY(-1px); }
+
+.btn-danger { background: var(--error) !important; }
+.btn-danger:hover { background: #ff6677 !important; }
+
+/* ===== 7. FORM ELEMENTS ===== */
+.input-group { margin-bottom: var(--sp-4); }
+.input-group label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 13px var(--sp-4);
+  font-size: 15px;
+  font-family: var(--font);
+  background: rgba(0, 0, 0, 0.28);
+  border: var(--border-normal);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+input[type="text"]::placeholder { color: var(--text-muted); }
+
+.select-input {
+  width: 100%;
+  padding: 13px var(--sp-4);
+  font-size: 15px;
+  font-family: var(--font);
+  background: rgba(0, 0, 0, 0.28);
+  border: var(--border-normal);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  transition: var(--transition-fast);
+  appearance: none;
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%239898b8' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 16px;
+}
+.select-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-dim);
+}
+
+/* Checkbox */
+.presentation-mode-toggle {
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-4);
+  border-top: var(--border-subtle);
+}
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  cursor: pointer;
+  user-select: none;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+.checkbox-label input[type="checkbox"] {
+  appearance: none;
+  width: 20px; height: 20px;
+  border: 2px solid rgba(255,255,255,0.25);
+  border-radius: 5px;
+  background: rgba(0,0,0,0.3);
+  position: relative;
+  transition: var(--transition-fast);
+  flex-shrink: 0;
+}
+.checkbox-label input[type="checkbox"]:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.checkbox-label input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ===== 8. LOBBY VIEW ===== */
+.logo-container {
+  text-align: center;
+  margin-bottom: var(--sp-10);
+  padding-top: var(--sp-10);
+}
+
+.logo {
+  font-size: clamp(36px, 6vw, 54px);
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--team-1), var(--accent), var(--team-2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: pulse-logo 3s ease-in-out infinite;
+  letter-spacing: -1px;
+}
+
+@keyframes pulse-logo {
+  0%, 100% { transform: scale(1); }
+  50%       { transform: scale(1.015); }
+}
+
+.tagline {
+  color: var(--text-secondary);
+  font-size: 17px;
+  margin-top: var(--sp-2);
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  margin: var(--sp-6) 0;
+  color: var(--text-muted);
+}
+.divider::before, .divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.09);
+}
+.divider span { padding: 0 var(--sp-4); font-size: 13px; }
+
+/* ===== 9. WAITING ROOM ===== */
+.room-header {
+  text-align: center;
+  margin-bottom: var(--sp-8);
+}
+.room-header h2 {
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: var(--sp-2);
+}
+.room-code {
+  font-size: clamp(40px, 10vw, 56px);
+  font-weight: 800;
+  letter-spacing: 10px;
+  color: var(--accent);
+  text-shadow: 0 0 40px var(--accent-glow);
+}
+.room-hint {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin-top: var(--sp-2);
+}
+.player-counter {
+  margin-top: var(--sp-2);
+  font-size: 13px;
+  color: var(--accent);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.teams-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-6);
+}
+.team-card {
+  background: var(--bg-glass);
+  backdrop-filter: blur(20px);
+  border-radius: var(--radius-md);
+  padding: var(--sp-5);
+  text-align: center;
+  border: 2px solid transparent;
+  transition: var(--transition-normal);
+}
+.team-card.team-1 { border-color: rgba(255, 62, 62, 0.28); }
+.team-card.team-2 { border-color: rgba(61, 139, 255, 0.28); }
+.team-card h3 { font-size: 17px; margin-bottom: var(--sp-4); }
+.team-players { min-height: 80px; margin-bottom: var(--sp-3); }
+.team-players .player {
+  padding: 5px var(--sp-3);
+  margin: 3px;
+  display: inline-block;
+  background: rgba(255,255,255,0.09);
+  border-radius: var(--radius-full);
+  font-size: 13px;
+}
+.team-1 .player { background: var(--team-1-dim); }
+.team-2 .player { background: var(--team-2-dim); }
+.player.is-you { border: 1px solid var(--accent); }
+
+.unassigned-players {
+  text-align: center;
+  margin-bottom: var(--sp-6);
+  padding: var(--sp-4);
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+}
+.unassigned-players h4 {
+  color: var(--text-secondary);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: var(--sp-3);
+}
+#unassigned-list .player {
+  display: inline-block;
+  padding: 5px var(--sp-3);
+  margin: 3px;
+  background: rgba(255,255,255,0.09);
+  border-radius: var(--radius-full);
+  font-size: 13px;
+}
+.host-controls { display: flex; gap: var(--sp-3); }
+.host-controls .btn { flex: 1; }
+
+/* ===== 10. GAME HEADER (Hotzone) ===== */
+.game-header { margin-bottom: var(--sp-6); }
+.score-display {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-4);
+  background: var(--bg-glass);
+  border-radius: var(--radius-md);
+}
+.score { text-align: center; }
+.team-label { display: block; font-size: 11px; color: var(--text-secondary); margin-bottom: 3px; }
+.score-value { font-size: 32px; font-weight: 800; }
+.team-1-score .score-value { color: var(--team-1); }
+.team-2-score .score-value { color: var(--team-2); }
+.round-display {
+  font-size: 16px;
+  color: var(--text-secondary);
+  background: rgba(0,0,0,0.25);
+  padding: 7px 16px;
+  border-radius: var(--radius-full);
+}
+
+/* ===== 11. HOTZONE GAME ===== */
+.category-container {
+  text-align: center;
+  margin-bottom: var(--sp-6);
+  padding: var(--sp-6);
+  background: var(--bg-glass);
+  border-radius: var(--radius-md);
+}
+.category-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  margin-bottom: var(--sp-2);
+}
+.category-topic {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: var(--sp-5);
+  color: var(--accent);
+}
+.scale-container { display: flex; align-items: center; gap: var(--sp-3); }
+.scale-left, .scale-right {
+  flex: 0 0 80px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-align: center;
+}
+.scale-bar {
+  flex: 1;
+  background: rgba(255,255,255,0.09);
+  border-radius: var(--radius-full);
+  padding: 8px 0;
+}
+.scale-numbers {
+  display: flex;
+  justify-content: space-around;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.player-panel {
+  background: var(--bg-glass);
+  border-radius: var(--radius-md);
+  padding: var(--sp-6);
+  margin-bottom: var(--sp-4);
+}
+
+/* Active player */
+.secret-number-container { text-align: center; margin-bottom: var(--sp-6); }
+.secret-label { font-size: 13px; color: var(--text-secondary); margin-bottom: var(--sp-2); }
+.secret-number {
+  font-size: 76px;
+  font-weight: 800;
+  color: var(--accent);
+  text-shadow: 0 0 48px var(--accent-glow);
+  animation: glow-pulse 2s ease-in-out infinite;
+}
+@keyframes glow-pulse {
+  0%, 100% { text-shadow: 0 0 40px var(--accent-glow); }
+  50%       { text-shadow: 0 0 70px var(--accent-glow), 0 0 100px var(--accent-glow); }
+}
+
+.clue-rules {
+  text-align: center;
+  padding: 10px var(--sp-4);
+  margin-bottom: var(--sp-4);
+  background: rgba(243, 156, 18, 0.1);
+  border: 1px solid rgba(243, 156, 18, 0.3);
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  color: var(--warning);
+}
+.clue-rules strong { color: var(--error); }
+
+.clue-timer {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--bg-surface);
+  border-radius: var(--radius-sm);
+}
+.timer-bar {
+  flex: 1; height: 6px;
+  background: rgba(255,255,255,0.09);
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+}
+.timer-bar::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--error), var(--warning), var(--success));
+  transform-origin: left;
+  animation: timer-shrink 30s linear forwards;
+}
+@keyframes timer-shrink {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+.timer-text { font-size: 13px; font-weight: 700; color: var(--text-secondary); min-width: 28px; text-align: right; }
+
+.clue-input-container { display: flex; gap: var(--sp-3); }
+.clue-input-container input { flex: 1; }
+.clue-input-container .btn { flex: 0 0 auto; width: auto; }
+
+/* Waiting panel */
+.waiting-panel { text-align: center; }
+.waiting-message { padding: var(--sp-10) var(--sp-5); }
+.spinner {
+  width: 48px; height: 48px;
+  border: 3px solid rgba(255,255,255,0.09);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  margin: 0 auto var(--sp-5);
+  animation: spin 0.9s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Guessing panel */
+.clue-display { text-align: center; margin-bottom: var(--sp-6); }
+.clue-label { font-size: 13px; color: var(--text-secondary); display: block; margin-bottom: var(--sp-2); }
+.clue-text { font-size: 30px; font-weight: 700; color: var(--text-primary); word-break: break-word; }
+
+.guess-container { text-align: center; }
+.guess-container p { color: var(--text-secondary); margin-bottom: var(--sp-4); }
+.number-buttons { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--sp-2); }
+.number-btn {
+  aspect-ratio: 1;
+  font-size: 20px; font-weight: 700;
+  background: rgba(255,255,255,0.09);
+  border: 2px solid rgba(255,255,255,0.18);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+.number-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: scale(1.08);
+}
+.other-team-waiting { text-align: center; color: var(--text-muted); padding: var(--sp-5); }
+
+/* Result panel */
+.result-content { text-align: center; }
+.result-numbers {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-6);
+  margin-bottom: var(--sp-6);
+}
+.result-guess, .result-actual { text-align: center; }
+.result-label { display: block; font-size: 11px; color: var(--text-secondary); margin-bottom: 3px; }
+.result-value { font-size: 50px; font-weight: 800; }
+.result-guess  .result-value { color: var(--text-muted); }
+.result-actual .result-value { color: var(--success); }
+.result-arrow { font-size: 30px; color: var(--text-muted); }
+.result-points {
+  font-size: 24px; font-weight: 700;
+  color: var(--success);
+  margin-bottom: var(--sp-6);
+  animation: bounceIn 0.4s var(--ease);
+}
+.result-points.zero { color: var(--error); }
+@keyframes bounceIn {
+  0%  { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.1); }
+  100%{ transform: scale(1); opacity: 1; }
+}
+
+/* Current turn */
+.current-turn-info {
+  text-align: center;
+  padding: var(--sp-3);
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+  color: var(--text-secondary);
+  font-size: 14px;
+  margin-top: var(--sp-4);
+}
+#current-team-indicator { margin-right: var(--sp-2); }
+#current-player-name { font-weight: 600; color: var(--text-primary); }
+
+/* ===== 12. GAME OVER VIEW ===== */
+.gameover-content { text-align: center; padding-top: 60px; }
+.winner-title {
+  font-size: clamp(36px, 6vw, 54px);
+  margin-bottom: var(--sp-10);
+  animation: celebrate 1.2s ease infinite;
+}
+@keyframes celebrate {
+  0%, 100% { transform: scale(1) rotate(-1.5deg); }
+  50%       { transform: scale(1.04) rotate(1.5deg); }
+}
+.final-scores {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-6);
+  margin-bottom: var(--sp-10);
+}
+.final-score {
+  text-align: center;
+  padding: var(--sp-6) var(--sp-8);
+  background: var(--bg-glass);
+  border-radius: var(--radius-md);
+}
+.team-name { display: block; font-size: 15px; margin-bottom: var(--sp-2); }
+.team-points { font-size: clamp(42px, 6vw, 56px); font-weight: 800; }
+.team-1-final .team-points { color: var(--team-1); }
+.team-2-final .team-points { color: var(--team-2); }
+.vs-divider { font-size: 22px; color: var(--text-muted); }
+#play-again-btn { max-width: 280px; margin: 0 auto; }
+
+/* ===== 13. TOAST ===== */
+.toast {
+  position: fixed;
+  bottom: var(--sp-5);
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  padding: var(--sp-3) var(--sp-6);
+  background: var(--bg-secondary);
+  border: var(--border-normal);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 14px;
+  opacity: 0;
+  transition: var(--transition-normal);
+  z-index: 10000;
+  white-space: nowrap;
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.toast.error { border-color: var(--error); background: rgba(231, 76, 60, 0.18); }
+
+/* ===== 14. ACTIVE ROOMS LIST ===== */
+.active-rooms-section {
+  margin-top: var(--sp-4);
+  border-top: var(--border-subtle);
+  padding-top: var(--sp-4);
+}
+.active-rooms-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--sp-3);
+}
+.active-rooms-title {
+  font-size: 12px;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-weight: 600;
+}
+.refresh-btn {
+  background: none;
+  border: var(--border-normal);
+  color: var(--text-secondary);
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+}
+.refresh-btn:hover { background: var(--bg-elevated); color: var(--text-primary); transform: rotate(180deg); }
+.active-rooms-list { display: flex; flex-direction: column; gap: 7px; max-height: 200px; overflow-y: auto; }
+.no-rooms { text-align: center; color: var(--text-muted); font-size: 13px; padding: var(--sp-3); }
+.active-room-card {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: 10px var(--sp-3);
+  background: var(--bg-surface);
+  border: var(--border-subtle);
+  border-radius: var(--radius-sm);
+  transition: var(--transition-fast);
+}
+.active-room-card:hover { background: var(--bg-elevated); border-color: rgba(255,255,255,0.14); }
+.active-room-info { display: flex; flex-direction: column; gap: 2px; min-width: 60px; }
+.active-room-code { font-weight: 700; font-size: 13px; color: var(--accent); letter-spacing: 2px; }
+.active-room-host { font-size: 11px; color: var(--text-muted); }
+.active-room-meta { flex: 1; display: flex; align-items: center; gap: var(--sp-2); flex-wrap: wrap; }
+.active-room-players, .active-room-game { font-size: 12px; color: var(--text-secondary); }
+.active-room-state { font-size: 10px; padding: 2px 7px; border-radius: var(--radius-full); font-weight: 600; text-transform: uppercase; }
+.active-room-state.state-lobby   { background: rgba(46, 204, 113, 0.14); color: var(--success); }
+.active-room-state.state-playing { background: var(--accent-dim); color: var(--accent); }
+.active-room-state.state-finished{ background: rgba(85, 85, 138, 0.14); color: var(--text-muted); }
+
+/* ===== 15. ADMIN PANEL ===== */
+.admin-panel {
+  position: fixed;
+  top: 0; right: -320px;
+  width: 300px; height: 100vh;
+  background: var(--bg-secondary);
+  border-left: var(--border-subtle);
+  padding: var(--sp-5);
+  z-index: 10000;
+  transition: right var(--transition-normal);
+  overflow-y: auto;
+}
+.admin-panel.open { right: 0; }
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--sp-5);
+  padding-bottom: var(--sp-4);
+  border-bottom: var(--border-subtle);
+}
+.admin-header h3 { margin: 0; font-size: 17px; }
+.admin-close {
+  background: none; border: none;
+  color: var(--text-secondary);
+  font-size: 19px; cursor: pointer; padding: 4px;
+}
+.admin-close:hover { color: var(--text-primary); }
+.admin-section { margin-bottom: var(--sp-5); }
+.admin-section h4 {
+  font-size: 11px; color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: var(--sp-3);
+}
+.admin-player-list { display: flex; flex-direction: column; gap: var(--sp-2); }
+.admin-player-item {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: var(--sp-3); background: var(--bg-surface); border-radius: var(--radius-sm);
+}
+.admin-player-info { display: flex; align-items: center; gap: var(--sp-3); }
+.admin-player-status { width: 8px; height: 8px; border-radius: 50%; background: var(--success); }
+.admin-player-status.offline { background: var(--error); }
+.admin-player-name { font-size: 13px; }
+.admin-player-score { font-size: 12px; color: var(--text-secondary); }
+.admin-player-actions { display: flex; gap: 5px; }
+.admin-player-actions button {
+  padding: 4px 8px; font-size: 11px;
+  background: rgba(255,255,255,0.09); border: none;
+  border-radius: 4px; color: var(--text-primary); cursor: pointer;
+}
+.admin-player-actions button:hover { background: var(--accent); }
+
+.admin-toggle {
+  position: fixed;
+  bottom: 80px; right: var(--sp-5);
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: var(--border-normal);
+  color: var(--text-primary);
+  font-size: 19px; cursor: pointer;
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition-fast);
+}
+.admin-toggle:hover { background: var(--accent); border-color: var(--accent); }
+
+.leave-room-btn {
+  position: fixed;
+  bottom: var(--sp-5); right: var(--sp-5);
+  width: 48px; height: 48px;
+  border-radius: 50%;
+  background: var(--bg-secondary);
+  border: var(--border-normal);
+  color: var(--text-primary);
+  font-size: 19px; cursor: pointer;
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  transition: var(--transition-fast);
+}
+.leave-room-btn:hover { background: var(--error); border-color: var(--error); }
+
+/* ===== 16. PRESENTATION TOGGLE BUTTON ===== */
+#toggle-presentation-btn {
+  position: fixed;
+  bottom: var(--sp-5); left: var(--sp-5);
+  background: rgba(0,0,0,0.55);
+  border: var(--border-normal);
+  color: white;
+  padding: 0;
+  border-radius: 50%;
+  width: clamp(44px, 4.5vw, 72px);
+  height: clamp(44px, 4.5vw, 72px);
+  font-size: clamp(20px, 2.2vw, 36px);
+  cursor: pointer;
+  z-index: 9999;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity var(--transition-fast), background var(--transition-fast);
+}
+#toggle-presentation-btn:hover { background: var(--accent); border-color: var(--accent); }
+
+/* ===== 17. CONFETTI ===== */
+#confetti-canvas {
+  position: fixed; top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  pointer-events: none; z-index: 99999;
+}
+
+/* ===== 18. MOBILE RESPONSIVE (≤ 600px) ===== */
+@media (max-width: 600px) {
+  .logo { font-size: 30px; }
+  .logo-container { padding-top: var(--sp-8); margin-bottom: var(--sp-8); }
+  .room-code { font-size: 38px; letter-spacing: 6px; }
+  .teams-container { grid-template-columns: 1fr; }
+  .host-controls { flex-direction: column; }
+  .category-topic { font-size: 22px; }
+  .scale-container { gap: var(--sp-1); }
+  .scale-left, .scale-right { flex: 0 0 64px; font-size: 11px; }
+  .scale-numbers { font-size: 10px; }
+  .secret-number { font-size: 60px; }
+  .clue-input-container { flex-direction: column; }
+  .number-buttons { grid-template-columns: repeat(5, 1fr); }
+  .final-scores { flex-direction: column; gap: var(--sp-4); }
+  .vs-divider { display: none; }
+  .result-value { font-size: 40px; }
+}
+
+/* ============================================================
+   ===== JEOPARDY DESIGN SYSTEM =====
+   Primary: Host-Laptop/Beamer (full width)
+   Secondary: Mobile players
+   ============================================================ */
+
+/* ===== 19. JEOPARDY LAYOUT WRAPPER ===== */
+#jeopardy-interface {
+  width: 100%;
+}
+
+/* Room code in-game */
+.room-code-ingame {
+  text-align: center;
+  margin-bottom: var(--sp-3);
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.room-code-ingame strong {
+  color: var(--accent);
+  font-size: 15px;
+  letter-spacing: 2px;
+}
+
+/* ===== 20. JEOPARDY SCOREBOARD ===== */
+.jeopardy-scoreboard {
+  display: flex;
+  justify-content: center;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-4);
+  flex-wrap: wrap;
+}
+
+.jeopardy-score {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  background: rgba(0,0,0,0.28);
+  padding: var(--sp-3) var(--sp-5);
+  border-radius: var(--radius-md);
+  border: 2px solid transparent;
+  transition: var(--transition-normal);
+  min-width: 140px;
+  justify-content: space-between;
+}
+.jeopardy-score.active {
+  border-color: var(--accent);
+  background: var(--accent-dim);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+.jeopardy-score.team-1-score { border-color: var(--team-1-glow); }
+.jeopardy-score.team-1-score.active { border-color: var(--team-1); background: var(--team-1-dim); box-shadow: 0 0 20px var(--team-1-glow); }
+.jeopardy-score.team-2-score { border-color: var(--team-2-glow); }
+.jeopardy-score.team-2-score.active { border-color: var(--team-2); background: var(--team-2-dim); box-shadow: 0 0 20px var(--team-2-glow); }
+
+.jeopardy-score-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+.jeopardy-score-val {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-primary);
+}
+.jeopardy-score.team-1-score .jeopardy-score-val { color: var(--team-1); }
+.jeopardy-score.team-2-score .jeopardy-score-val { color: var(--team-2); }
+
+/* ===== 21. JEOPARDY TURN BANNER ===== */
+.jeopardy-turn-banner {
+  text-align: center;
+  padding: var(--sp-3) var(--sp-5);
+  margin-bottom: var(--sp-3);
+  border-radius: var(--radius-sm);
+  font-size: 15px;
+  font-weight: 700;
+  transition: var(--transition-normal);
+}
+.jeopardy-turn-banner.my-turn {
+  background: var(--accent-dim);
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  animation: pulse-banner 2s ease-in-out infinite;
+}
+.jeopardy-turn-banner.waiting {
+  background: var(--bg-surface);
+  border: var(--border-subtle);
+  color: var(--text-secondary);
+}
+@keyframes pulse-banner {
+  0%, 100% { box-shadow: 0 0 0 0 var(--accent-glow); }
+  50%       { box-shadow: 0 0 16px 3px var(--accent-glow); }
+}
+
+/* ===== 22. JEOPARDY PROGRESS ===== */
+.jeopardy-progress {
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-3);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--bg-surface);
+  border-radius: var(--radius-sm);
+}
+.progress-bar-container {
+  width: 100%; height: 4px;
+  background: rgba(255,255,255,0.09);
+  border-radius: 2px;
+  margin-top: 5px;
+  overflow: hidden;
+}
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--success));
+  border-radius: 2px;
+  transition: width 0.5s var(--ease);
+}
+
+/* ===== 23. JEOPARDY BOARD ===== */
+.jeopardy-board {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-top: var(--sp-4);
+  width: 100%;
+}
+
+.jeopardy-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Category header */
+.jeopardy-cat-header {
+  background: linear-gradient(160deg, rgba(255,107,43,0.18) 0%, rgba(255,107,43,0.08) 100%);
+  border: 1px solid rgba(255,107,43,0.3);
+  color: var(--text-primary);
+  padding: var(--sp-3) var(--sp-2);
+  text-align: center;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: clamp(11px, 1.5vw, 16px);
+  min-height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  line-height: 1.25;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  word-break: normal;
+}
+
+/* Question buttons */
+.jeopardy-btn {
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.14);
+  color: var(--accent);
+  padding: clamp(12px, 2vw, 20px) 0;
+  font-size: clamp(16px, 2.5vw, 28px);
+  font-weight: 800;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: var(--transition-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  letter-spacing: -0.5px;
+}
+
+.jeopardy-btn:hover:not(.disabled) {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 20px var(--accent-glow);
+}
+.jeopardy-btn:active:not(.disabled) {
+  transform: translateY(0) scale(1);
+}
+
+/* Played states */
+.jeopardy-btn.disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+/* Answered (team colors) */
+.jeopardy-btn.team-1-correct {
+  background: rgba(255,62,62,0.18) !important;
+  border-color: var(--team-1) !important;
+  color: var(--team-1) !important;
+  opacity: 0.5 !important;
+}
+.jeopardy-btn.team-2-correct {
+  background: rgba(61,139,255,0.18) !important;
+  border-color: var(--team-2) !important;
+  color: var(--team-2) !important;
+  opacity: 0.5 !important;
+}
+.jeopardy-btn.team-1-wrong,
+.jeopardy-btn.team-2-wrong {
+  opacity: 0.2 !important;
+  pointer-events: none;
+  text-decoration: line-through;
+  background: transparent !important;
+  border-color: rgba(255,255,255,0.08) !important;
+  color: var(--text-muted) !important;
+}
+
+/* ===== 24. JEOPARDY QUESTION CARD ===== */
+.jeopardy-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(var(--sp-6), 4vw, var(--sp-16));
+  margin-top: var(--sp-4);
+  border-radius: var(--radius-xl);
+  background: var(--bg-glass);
+  border: var(--border-normal);
+  min-height: 50vh;
+  width: 100%;
+}
+
+/* Card header: who is active */
+.jeopardy-header {
+  width: 100%;
+  text-align: center;
+  margin-bottom: var(--sp-5);
+  padding: var(--sp-4) var(--sp-6);
+  background: var(--bg-surface);
+  border-radius: var(--radius-md);
+  border: var(--border-subtle);
+}
+.jeopardy-header .active-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  display: block;
+  margin-bottom: 4px;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+}
+.jeopardy-header .active-name {
+  font-size: clamp(18px, 2.5vw, 28px);
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  display: block;
+  text-shadow: 0 0 12px var(--accent-glow);
+}
+
+/* Category & Points */
+#jeopardy-category-label {
+  font-size: clamp(14px, 2vw, 22px);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  margin-bottom: var(--sp-2);
+  text-align: center;
+}
+
+#jeopardy-points-label {
+  font-size: clamp(32px, 5vw, 72px);
+  font-weight: 800;
+  color: var(--accent);
+  margin: var(--sp-3) 0 var(--sp-5);
+  text-align: center;
+  font-family: var(--font-mono);
+  text-shadow: 0 0 32px var(--accent-glow);
+}
+
+/* Question text */
+#jeopardy-question-text {
+  font-size: clamp(18px, 3vw, 40px);
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: center;
+  margin: var(--sp-6) 0;
+  width: 100%;
+  color: var(--text-primary);
+}
+
+/* Answer text */
+#jeopardy-answer-text {
+  font-size: clamp(22px, 3.5vw, 48px);
+  font-weight: 800;
+  color: var(--success);
+  text-align: center;
+  margin-bottom: var(--sp-5);
+  text-shadow: 0 0 24px var(--success-glow);
+  animation: fadeUp 0.3s var(--ease);
+}
+
+/* Actions */
+#jeopardy-actions {
+  width: 100%;
+  text-align: center;
+  margin-top: var(--sp-4);
+}
+
+#reveal-answer-btn {
+  max-width: 320px;
+  margin: 0 auto;
+}
+
+#evaluation-controls {
+  margin-top: var(--sp-6);
+  width: 100%;
+}
+
+#eval-buttons {
+  display: flex;
+  gap: var(--sp-4);
+  justify-content: center;
+  margin-top: var(--sp-4);
+  flex-wrap: wrap;
+}
+#eval-buttons .btn {
+  flex: 1;
+  max-width: 220px;
+  font-size: 15px;
+}
+#eval-correct { background: linear-gradient(135deg, var(--success), #27ae60); box-shadow: 0 4px 16px var(--success-glow); }
+#eval-correct:hover:not(:disabled) { box-shadow: 0 8px 24px var(--success-glow); }
+#eval-wrong { border-color: var(--error); color: var(--error); }
+#eval-wrong:hover:not(:disabled) { background: rgba(231,76,60,0.15); }
+
+#back-to-board-btn {
+  max-width: 240px;
+  margin: var(--sp-5) auto 0;
+}
+
+/* Options grid (multiple choice) */
+.jeopardy-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
+  width: 100%;
+  margin-top: var(--sp-6);
+}
+
+.jeopardy-option {
+  background: var(--bg-surface);
+  border: 2px solid rgba(255,255,255,0.14);
+  border-radius: var(--radius-md);
+  padding: var(--sp-4) var(--sp-5);
+  font-size: clamp(14px, 2vw, 22px);
+  text-align: left;
+  display: flex;
+  align-items: center;
+  transition: var(--transition-normal);
+  line-height: 1.4;
+}
+.jeopardy-option .option-letter {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  border-radius: 50%;
+  width: 36px; height: 36px;
+  min-width: 36px;
+  display: flex; align-items: center; justify-content: center;
+  margin-right: var(--sp-3);
+  font-size: 14px;
+}
+.jeopardy-option.correct-option {
+  background: rgba(46, 204, 113, 0.15);
+  border-color: var(--success);
+  color: var(--success);
+}
+.jeopardy-option.correct-option .option-letter { background: var(--success); }
+.jeopardy-option.wrong-option { opacity: 0.4; }
+
+/* ============================================================
+   ===== BEAMER / HOST LAPTOP MODE =====
+   Triggered: body.jeopardy-mode (set by JS when on Jeopardy board)
+   Optimized for large screen full-width projection
+   ============================================================ */
+
+body.jeopardy-mode .container {
+  max-width: 100%;
+  padding: clamp(var(--sp-2), 1vh, var(--sp-4)) clamp(var(--sp-4), 2vw, var(--sp-8));
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+/* Hide standard game header (Hotzone scores) in Jeopardy mode */
+body.jeopardy-mode .game-header,
+body.jeopardy-mode .current-turn-info {
+  display: none !important;
+}
+
+/* Flex chain: game-view → game-content fills remaining height */
+body.jeopardy-mode #game-view {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+body.jeopardy-mode .game-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+/* Scoreboard – beamer */
+body.jeopardy-mode .jeopardy-scoreboard {
+  gap: clamp(var(--sp-3), 1.5vw, var(--sp-6));
+  margin-bottom: clamp(var(--sp-2), 1vh, var(--sp-3));
+  flex-shrink: 0;
+}
+
+body.jeopardy-mode .jeopardy-score {
+  min-width: clamp(160px, 22vw, 320px);
+  padding: clamp(var(--sp-2), 1vh, var(--sp-4)) clamp(var(--sp-4), 2vw, var(--sp-8));
+  border-radius: var(--radius-md);
+  border: 2px solid transparent;
+  transition: all 0.25s ease;
+}
+
+/* Bright colored highlighting for active team */
+body.jeopardy-mode .jeopardy-score.team-1-score.active {
+  border-color: var(--error);
+  box-shadow: 0 0 24px rgba(255, 68, 68, 0.4);
+  background: rgba(255, 68, 68, 0.1);
+  transform: scale(1.03);
+}
+
+body.jeopardy-mode .jeopardy-score.team-2-score.active {
+  border-color: var(--info);
+  box-shadow: 0 0 24px rgba(68, 136, 255, 0.4);
+  background: rgba(68, 136, 255, 0.1);
+  transform: scale(1.03);
+}
+
+body.jeopardy-mode .jeopardy-score-name {
+  font-size: clamp(14px, 1.8vw, 26px);
+}
+body.jeopardy-mode .jeopardy-score-val {
+  font-size: clamp(28px, 4.5vw, 72px);
+  font-family: var(--font-mono);
+}
+
+/* Room code */
+body.jeopardy-mode .room-code-ingame {
+  font-size: clamp(14px, 1.5vw, 22px);
+  margin-bottom: clamp(var(--sp-2), 1vh, var(--sp-3));
+  flex-shrink: 0;
+}
+body.jeopardy-mode .room-code-ingame strong {
+  font-size: clamp(18px, 2vw, 30px);
+}
+
+/* Turn banner */
+body.jeopardy-mode .jeopardy-turn-banner {
+  font-size: clamp(16px, 2vw, 32px);
+  padding: clamp(var(--sp-2), 1vh, var(--sp-4));
+  margin-bottom: clamp(var(--sp-2), 1vh, var(--sp-3));
+  flex-shrink: 0;
+}
+
+/* Progress */
+body.jeopardy-mode .jeopardy-progress {
+  font-size: clamp(13px, 1.4vw, 20px);
+  padding: clamp(var(--sp-2), 0.8vh, var(--sp-3)) var(--sp-4);
+  margin-bottom: clamp(var(--sp-2), 1vh, var(--sp-3));
+  flex-shrink: 0;
+}
+
+body.jeopardy-mode .jeopardy-team-switcher {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  gap: var(--sp-4);
+  margin-bottom: clamp(var(--sp-2), 1vh, var(--sp-3));
+}
+
+body.jeopardy-mode .team-switch-btn {
+  padding: clamp(10px, 1.5vh, 18px) clamp(16px, 2vw, 32px);
+  border-radius: var(--radius-md);
+  border: 2px solid var(--border-subtle);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: clamp(14px, 1.5vw, 22px);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 48px;
+}
+
+body.jeopardy-mode .team-switch-btn:hover {
+  transform: translateY(-2px);
+}
+
+body.jeopardy-mode .team-switch-btn.team-1-btn.active-team {
+  border-color: var(--error);
+  background: rgba(255, 68, 68, 0.15);
+  box-shadow: 0 0 12px rgba(255, 68, 68, 0.3);
+}
+
+body.jeopardy-mode .team-switch-btn.team-2-btn.active-team {
+  border-color: var(--info);
+  background: rgba(68, 136, 255, 0.15);
+  box-shadow: 0 0 12px rgba(68, 136, 255, 0.3);
+}
+
+body.jeopardy-mode .team-switch-btn:not(.active-team) {
+  opacity: 0.5;
+  filter: grayscale(0.4);
+}
+
+/* ───── BOARD (Beamer) ───── */
+body.jeopardy-mode #jeopardy-interface {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+body.jeopardy-mode .jeopardy-board {
+  gap: clamp(6px, 1vh, 16px);
+  margin-top: 0;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+body.jeopardy-mode .jeopardy-col {
+  gap: clamp(6px, 1vh, 16px);
+  /* Equal height columns */
+  height: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+body.jeopardy-mode .jeopardy-cat-header {
+  font-size: clamp(12px, 1.5vw, 24px);
+  min-height: 40px;
+  flex: 1;
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--radius-md);
+  background: linear-gradient(160deg, rgba(255,107,43,0.2) 0%, rgba(255,107,43,0.1) 100%);
+  border: 1px solid rgba(255,107,43,0.4);
+  letter-spacing: 0.5px;
+  hyphens: auto;
+  word-break: normal;
+  overflow-wrap: break-word;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.jeopardy-mode .jeopardy-btn {
+  font-size: clamp(20px, 3.5vh, 70px);
+  padding: 0;
+  flex: 1.5;
+  min-height: 0; /* Let flex-shrink handle it on small screens */
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-weight: 900;
+  border-width: 2px;
+  background: linear-gradient(160deg, rgba(255,255,255,0.09) 0%, rgba(255,255,255,0.04) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+body.jeopardy-mode .jeopardy-btn:hover:not(.disabled) {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 6px 28px var(--accent-glow);
+}
+
+/* ───── QUESTION CARD (Beamer) ───── */
+body.jeopardy-mode .jeopardy-card {
+  min-height: 80vh;
+  flex: 1;
+  padding: clamp(var(--sp-6), 4vw, var(--sp-12));
+  justify-content: center;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+  margin: var(--sp-4) 0;
+  transition: all 0.3s ease;
+}
+
+body.jeopardy-mode .jeopardy-card.eval-success {
+  box-shadow: 0 0 40px rgba(71, 212, 118, 0.4);
+  border-color: var(--success);
+}
+
+body.jeopardy-mode .jeopardy-card.eval-error {
+  box-shadow: 0 0 40px rgba(255, 68, 68, 0.4);
+  border-color: var(--error);
+}
+
+body.jeopardy-mode .jeopardy-header {
+  padding: clamp(var(--sp-2), 1vh, var(--sp-4));
+  margin-bottom: clamp(var(--sp-3), 2vh, var(--sp-6));
+  background: transparent;
+  border: none;
+  border-bottom: var(--border-subtle);
+}
+body.jeopardy-mode .jeopardy-header .active-label {
+  font-size: clamp(12px, 1.2vw, 18px);
+}
+body.jeopardy-mode .jeopardy-header .active-name {
+  font-size: clamp(24px, 3.5vw, 56px);
+}
+
+body.jeopardy-mode #jeopardy-category-label {
+  font-size: clamp(18px, 2.5vw, 36px);
+  letter-spacing: 4px;
+}
+body.jeopardy-mode #jeopardy-points-label {
+  font-size: clamp(48px, 8vw, 128px);
+  margin: clamp(var(--sp-2), 1.5vh, var(--sp-6)) 0;
+}
+body.jeopardy-mode #jeopardy-question-text {
+  font-size: clamp(28px, 4.5vw, 80px);
+  line-height: 1.45;
+  margin: clamp(var(--sp-4), 2.5vh, var(--sp-8)) 0;
+}
+body.jeopardy-mode #jeopardy-answer-text {
+  font-size: clamp(36px, 6vw, 100px);
+  margin-top: clamp(var(--sp-4), 2.5vh, var(--sp-8));
+  color: var(--success);
+  font-weight: 800;
+}
+
+body.jeopardy-mode #eval-buttons {
+  gap: clamp(var(--sp-5), 3vw, var(--sp-10));
+  margin-top: clamp(var(--sp-6), 4vh, var(--sp-12));
+}
+body.jeopardy-mode #eval-buttons .btn {
+  font-size: clamp(18px, 2.5vw, 36px);
+  padding: clamp(var(--sp-4), 2.5vh, var(--sp-8)) clamp(var(--sp-6), 4vw, var(--sp-12));
+  max-width: 360px;
+  border-radius: var(--radius-md);
+}
+
+body.jeopardy-mode .jeopardy-options-grid {
+  gap: clamp(var(--sp-4), 2.5vw, var(--sp-8));
+  margin-top: clamp(var(--sp-5), 3vh, var(--sp-10));
+}
+body.jeopardy-mode .jeopardy-option {
+  font-size: clamp(20px, 3vw, 52px);
+  padding: clamp(var(--sp-4), 2.5vh, var(--sp-8)) clamp(var(--sp-5), 3vw, var(--sp-10));
+  border-radius: var(--radius-md);
+  border-width: 2px;
+}
+body.jeopardy-mode .jeopardy-option .option-letter {
+  width: clamp(36px, 4.5vw, 64px);
+  height: clamp(36px, 4.5vw, 64px);
+  min-width: clamp(36px, 4.5vw, 64px);
+  font-size: clamp(14px, 2vw, 28px);
+  margin-right: clamp(var(--sp-3), 2vw, var(--sp-6));
+}
+
+/* ===== PRESENTATION MODE (TV player, no controls) ===== */
+body.presentation-mode .jeopardy-turn-banner,
+body.presentation-mode .jeopardy-progress {
+  display: none !important;
+}
+body.presentation-mode #jeopardy-actions,
+body.presentation-mode #back-to-board-btn {
+  display: none !important;
+}
+body.presentation-mode .admin-toggle {
+  display: none !important;
+}
+body.presentation-mode .leave-room-btn {
+  display: none !important;
+}
+
+body.presentation-mode .player-panel.active-player-panel,
+body.presentation-mode .join-controls {
+  display: none !important;
+}
+body.presentation-mode #lobby-view .card {
+  display: block !important;
+  background: transparent; box-shadow: none; border: none;
+}
+body.presentation-mode #lobby-view input,
+body.presentation-mode #lobby-view button,
+body.presentation-mode #lobby-view .divider,
+body.presentation-mode #lobby-view .input-group {
+  display: none !important;
+}
+body.presentation-mode #lobby-view .logo-container {
+  transform: scale(2);
+  margin-top: 20vh;
+}
+body.presentation-mode #waiting-view .host-controls,
+body.presentation-mode .btn-team {
+  display: none !important;
+}
+body.presentation-mode .scale-container {
+  transform: scale(1.5);
+  margin: 60px 0;
+  justify-content: center;
+}
+body.presentation-mode .category-topic { font-size: 60px; margin-bottom: 40px; }
+body.presentation-mode .game-content { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; justify-content: center; min-height: 60vh; }
+body.presentation-mode .score-value { font-size: 64px; }
+body.presentation-mode .result-value { font-size: 80px; }
+
+/* ───── Host-only Jeopardy Notice ───── */
+.jeopardy-host-notice {
+  background: var(--bg-card);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-6);
+  margin: var(--sp-4) 0;
+  text-align: center;
+  box-shadow: 0 4px 20px var(--accent-glow);
+}
+
+.host-notice-teams {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--sp-6);
+  margin-bottom: var(--sp-4);
+}
+
+.host-notice-team {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: 1.2rem;
+}
+
+.host-notice-team.team-1 .team-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--error);
+  box-shadow: 0 0 10px var(--error);
+}
+
+.host-notice-team.team-2 .team-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--info);
+  box-shadow: 0 0 10px var(--info);
+}
+
+.host-notice-vs {
+  font-weight: 800;
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.host-notice-text {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* ───── Team Switcher Controls (Jeopardy Host Mode) ───── */
+.jeopardy-team-switcher {
+  display: flex;
+  justify-content: center;
+  gap: var(--sp-4);
+  margin-bottom: var(--sp-4);
+}
+
+.team-switch-btn {
+  padding: var(--sp-2) var(--sp-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-card);
+  color: var(--text-primary);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.team-switch-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.team-switch-btn.active-team {
+  border-color: var(--accent);
+  background: rgba(255, 107, 43, 0.15);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.btn-correct {
+  background: var(--success) !important;
+  color: #fff !important;
+  border: none !important;
+}
+
+.btn-wrong {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: var(--text-primary) !important;
+  border: 1px solid var(--border-subtle) !important;
+}
+
+.btn-correct:hover, .btn-wrong:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}

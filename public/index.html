@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="de">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kechters Spielestube</title>
+    <meta name="description" content="Kechters Spielestube - Partyspiele mit Freunden! Hotzone, Jeopardy & mehr.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@700;800;900&display=swap">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- Lobby View -->
+        <div id="lobby-view" class="view active">
+            <div class="logo-container">
+                <h1 class="logo">🎮 Kechters Spielestube</h1>
+                <p class="tagline">Partyspiele mit Freunden</p>
+            </div>
+
+            <div class="card glass">
+                <div class="input-group">
+                    <label for="player-name">Dein Name</label>
+                    <input type="text" id="player-name" placeholder="Gib deinen Namen ein..." maxlength="20">
+                </div>
+
+                <div id="host-options">
+                    <div class="input-group">
+                        <label for="game-selector">Spiel wählen</label>
+                        <select id="game-selector" class="select-input">
+                            <option value="hotzone">🔥 Hotzone</option>
+                            <option value="jeopardy">🧠 Jeopardy</option>
+                        </select>
+                    </div>
+
+                    <button id="create-room-btn" class="btn btn-primary">
+                        <span class="btn-icon">🏠</span>
+                        Raum erstellen
+                    </button>
+                </div>
+
+                <div class="divider">
+                    <span>oder</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="room-code">Raum-Code</label>
+                    <input type="text" id="room-code" placeholder="ABCD" maxlength="4"
+                        style="text-transform: uppercase;">
+                </div>
+
+                <button id="join-room-btn" class="btn btn-secondary">
+                    <span class="btn-icon">🚪</span>
+                    Raum beitreten
+                </button>
+
+                <div id="active-rooms-section" class="active-rooms-section">
+                    <div class="active-rooms-header">
+                        <span class="active-rooms-title">📡 Aktive Räume</span>
+                        <button id="refresh-rooms-btn" class="refresh-btn" title="Aktualisieren">🔄</button>
+                    </div>
+                    <div id="active-rooms-list" class="active-rooms-list">
+                        <div class="no-rooms">Keine aktiven Räume</div>
+                    </div>
+                </div>
+
+                <div class="presentation-mode-toggle">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="presentation-mode">
+                        <span>🖥️ Als Präsentation (TV) beitreten</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Waiting Room View -->
+        <div id="waiting-view" class="view">
+            <div class="room-header">
+                <h2>Raum-Code</h2>
+                <div class="room-code" id="display-room-code">ABCD</div>
+                <p class="room-hint">Teile diesen Code mit deinen Freunden!</p>
+                <div class="player-counter" id="player-counter">0 Spieler im Raum</div>
+            </div>
+
+            <div class="teams-container">
+                <div class="team-card team-1" id="team-1-card">
+                    <h3>🔴 Team Rot</h3>
+                    <div class="team-players" id="team-1-players"></div>
+                    <button class="btn btn-team team-1-btn" data-team="1">Beitreten</button>
+                </div>
+
+                <div class="team-card team-2" id="team-2-card">
+                    <h3>🔵 Team Blau</h3>
+                    <div class="team-players" id="team-2-players"></div>
+                    <button class="btn btn-team team-2-btn" data-team="2">Beitreten</button>
+                </div>
+            </div>
+
+            <div class="unassigned-players">
+                <h4>Warte auf Team-Zuweisung</h4>
+                <div id="unassigned-list"></div>
+            </div>
+
+            <div class="host-controls" id="host-controls">
+                <div id="jeopardy-theme-selector" style="display: none; margin-bottom: 12px;">
+                    <label for="theme-select"
+                        style="color: var(--text-secondary); font-size: 14px; margin-bottom: 6px; display: block;">🎯
+                        Jeopardy Thema</label>
+                    <select id="theme-select" class="select-input">
+                        <option value="allgemein">🌍 Allgemeinwissen</option>
+                    </select>
+                </div>
+                <button id="auto-assign-btn" class="btn btn-secondary">
+                    🎲 Teams mischen
+                </button>
+                <button id="start-game-btn" class="btn btn-primary">
+                    🚀 Spiel starten
+                </button>
+            </div>
+        </div>
+
+        <!-- Game View -->
+        <div id="game-view" class="view">
+            <div class="game-header">
+                <div class="score-display">
+                    <div class="score team-1-score">
+                        <span class="team-label">🔴 Team Rot</span>
+                        <span class="score-value" id="score-team-1">0</span>
+                    </div>
+                    <div class="round-display">
+                        <span id="current-round">1</span>/<span id="total-rounds">10</span>
+                    </div>
+                    <div class="score team-2-score">
+                        <span class="team-label">🔵 Team Blau</span>
+                        <span class="score-value" id="score-team-2">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="game-content">
+                <!-- Hotzone Interface -->
+                <div id="hotzone-interface">
+                    <!-- Category Display -->
+                    <div class="category-container">
+                        <div class="category-label">Kategorie</div>
+                        <h2 class="category-topic" id="category-topic">-</h2>
+                        <div class="scale-container">
+                            <span class="scale-left" id="scale-left">-</span>
+                            <div class="scale-bar">
+                                <div class="scale-numbers">
+                                    <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span>
+                                    <span>6</span><span>7</span><span>8</span><span>9</span><span>10</span>
+                                </div>
+                            </div>
+                            <span class="scale-right" id="scale-right">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Active Player View (Giving Clue) -->
+                    <div class="player-panel active-player-panel" id="active-player-panel" style="display: none;">
+                        <div class="secret-number-container">
+                            <div class="secret-label">Deine geheime Zahl</div>
+                            <div class="secret-number" id="secret-number">?</div>
+                        </div>
+                        <div class="clue-rules">
+                            ⚠️ Dein Hinweis darf <strong>KEINE Zahlen</strong> enthalten!
+                        </div>
+                        <div class="clue-timer" id="clue-timer" style="display: none;">
+                            <div class="timer-bar" id="timer-bar"></div>
+                            <span class="timer-text" id="timer-text">30s</span>
+                        </div>
+                        <div class="clue-input-container">
+                            <input type="text" id="clue-input" placeholder="Gib deinen Hinweis ein..." maxlength="50">
+                            <button id="submit-clue-btn" class="btn btn-primary">
+                                Hinweis senden 📤
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Team Waiting View -->
+                    <div class="player-panel waiting-panel" id="waiting-panel" style="display: none;">
+                        <div class="waiting-message">
+                            <div class="spinner"></div>
+                            <p id="waiting-text">Warte auf Hinweis...</p>
+                        </div>
+                    </div>
+
+                    <!-- Guessing View -->
+                    <div class="player-panel guessing-panel" id="guessing-panel" style="display: none;">
+                        <div class="clue-display">
+                            <span class="clue-label">Der Hinweis ist:</span>
+                            <div class="clue-text" id="clue-display">-</div>
+                        </div>
+                        <div class="guess-container" id="guess-container">
+                            <p>Wählt eine Zahl:</p>
+                            <div class="number-buttons" id="number-buttons"></div>
+                        </div>
+                        <div class="other-team-waiting" id="other-team-waiting" style="display: none;">
+                            <p>Das andere Team ist am Raten...</p>
+                        </div>
+                    </div>
+
+                    <!-- Result View -->
+                    <div class="player-panel result-panel" id="result-panel" style="display: none;">
+                        <div class="result-content">
+                            <div class="result-numbers">
+                                <div class="result-guess">
+                                    <span class="result-label">Getippt</span>
+                                    <span class="result-value" id="result-guess">?</span>
+                                </div>
+                                <div class="result-arrow">→</div>
+                                <div class="result-actual">
+                                    <span class="result-label">Richtig</span>
+                                    <span class="result-value" id="result-actual">?</span>
+                                </div>
+                            </div>
+                            <div class="result-points" id="result-points">+0 Punkte</div>
+                            <button id="next-turn-btn" class="btn btn-primary">
+                                Weiter ➡️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jeopardy Interface -->
+                <div id="jeopardy-interface" style="display: none;">
+
+                    <div class="room-code-ingame" id="room-code-ingame">
+                        <span>Code: </span><strong id="game-room-code">-</strong>
+                    </div>
+
+                    <!-- Jeopardy Turn Banner -->
+                    <div id="jeopardy-turn-banner" class="jeopardy-turn-banner">
+                        🎯 Du bist dran – wähle eine Frage!
+                    </div>
+
+                    <!-- Jeopardy Progress -->
+                    <div id="jeopardy-progress" class="jeopardy-progress">
+                        <span id="jeopardy-progress-text">0/25</span> Fragen gespielt
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" id="jeopardy-progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <div id="jeopardy-scoreboard" class="jeopardy-scoreboard">
+                        <!-- Scores injected here -->
+                    </div>
+
+                    <!-- Host-only Team Switcher -->
+                    <div id="jeopardy-team-switcher" class="jeopardy-team-switcher" style="display: none;">
+                        <button id="switch-team-1-btn" class="team-switch-btn team-1-btn">🔴 Team Rot ist dran</button>
+                        <button id="switch-team-2-btn" class="team-switch-btn team-2-btn">🔵 Team Blau ist dran</button>
+                    </div>
+
+                    <div id="jeopardy-board" class="jeopardy-board">
+                        <!-- Categories will be injected here -->
+                    </div>
+
+                    <div id="jeopardy-card" class="jeopardy-card card glass" style="display: none; text-align: center;">
+                        <div class="jeopardy-header">
+                            <span class="active-label">AM ZUG</span>
+                            <span class="active-name" id="jeopardy-active-player-name">-</span>
+                        </div>
+                        <div class="category-label" id="jeopardy-category-label">KATEGORIE</div>
+                        <div id="jeopardy-points-label">300</div>
+                        <div id="jeopardy-question-text">...</div>
+
+                        <div id="jeopardy-options-grid" class="jeopardy-options-grid" style="display: none;"></div>
+
+                        <div id="jeopardy-actions">
+                            <button id="reveal-answer-btn" class="btn btn-primary">
+                                Antwort zeigen 👀
+                            </button>
+
+                            <div id="evaluation-controls" style="display: none;">
+                                <div id="jeopardy-answer-text">ANTWORT</div>
+                                <div id="eval-buttons">
+                                    <button id="eval-correct" class="btn btn-correct">✅ Richtig (+Punkte)</button>
+                                    <button id="eval-wrong" class="btn btn-wrong">❌ Falsch (0 Punkte)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button id="back-to-board-btn" class="btn btn-secondary" style="display: none;">Zurück zum Board ↩</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="current-turn-info">
+                <span id="current-team-indicator">🔴</span>
+                <span id="current-player-name">-</span> ist am Zug
+            </div>
+        </div>
+
+        <!-- Game Over View -->
+        <div id="gameover-view" class="view">
+            <div class="gameover-content">
+                <h1 class="winner-title" id="winner-title">🏆 Gewinner!</h1>
+                <div class="final-scores">
+                    <div class="final-score team-1-final">
+                        <span class="team-name">🔴 Team Rot</span>
+                        <span class="team-points" id="final-score-1">0</span>
+                    </div>
+                    <div class="vs-divider">VS</div>
+                    <div class="final-score team-2-final">
+                        <span class="team-name">🔵 Team Blau</span>
+                        <span class="team-points" id="final-score-2">0</span>
+                    </div>
+                </div>
+                <button id="play-again-btn" class="btn btn-primary">
+                    🔄 Nochmal spielen
+                </button>
+            </div>
+        </div>
+
+        <!-- Confetti Canvas -->
+        <canvas id="confetti-canvas"></canvas>
+        <!-- Admin Panel (Hidden by default, visible to host/TV) -->
+        <div id="admin-panel" class="admin-panel">
+            <div class="admin-header">
+                <h3>⚙️ Admin</h3>
+                <button id="admin-close-btn" class="admin-close">✕</button>
+            </div>
+
+            <div class="admin-section">
+                <h4>Spieler</h4>
+                <div id="admin-player-list" class="admin-player-list"></div>
+            </div>
+
+            <div class="admin-section" id="admin-turn-section">
+                <h4>Zug-Kontrolle</h4>
+                <button id="admin-skip-turn" class="btn btn-small">⏭️ Turn überspringen</button>
+                <button id="admin-reset-round" class="btn btn-small">🔄 Runde zurücksetzen</button>
+            </div>
+
+            <div class="admin-section" id="admin-hotzone-section" style="display: none;">
+                <h4>Team-Punkte</h4>
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <button onclick="adminAdjustScore('1', 1)" class="btn btn-small" style="flex:1">🔴 +1</button>
+                    <button onclick="adminAdjustScore('1', -1)" class="btn btn-small" style="flex:1">🔴 -1</button>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button onclick="adminAdjustScore('2', 1)" class="btn btn-small" style="flex:1">🔵 +1</button>
+                    <button onclick="adminAdjustScore('2', -1)" class="btn btn-small" style="flex:1">🔵 -1</button>
+                </div>
+            </div>
+
+            <div class="admin-section">
+                <h4>Spiel</h4>
+                <button id="admin-end-game" class="btn btn-small btn-danger">🏁 Spiel beenden</button>
+            </div>
+        </div>
+
+        <!-- Admin Toggle Button -->
+        <button id="admin-toggle-btn" class="admin-toggle" style="display: none;">⚙️</button>
+
+        <!-- Leave Room Button -->
+        <button id="leave-room-btn" class="leave-room-btn" style="display: none;">🚪</button>
+
+        <!-- Toast Notification -->
+        <div id="toast" class="toast"></div>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script type="module" src="js/app.js"></script>
+</body>
+
+</html>
