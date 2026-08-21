@@ -269,6 +269,24 @@ io.on("connection", (socket) => {
     console.log(`Jeopardy Theme für ${currentRoom}: ${result.themeId}`);
   });
 
+  // --- Jeopardy Question History ---
+
+  // Admin: History für ein Theme (oder alle) zurücksetzen
+  socket.on("resetJeopardyHistory", (themeId) => {
+    if (!currentRoom) return;
+    const room = gameManager.rooms[currentRoom];
+    const player = room?.players.find(p => p.id === socket.id);
+    if (!player?.isHost) { socket.emit("error", "Nur der Host kann die History zurücksetzen."); return; }
+    JeopardyGame.resetHistory(themeId || null); // null = alles zurücksetzen
+    socket.emit("jeopardyHistoryReset", { theme: themeId || "alle" });
+    console.log(`[History] Zurückgesetzt von Host (Theme: ${themeId || "alle"})`);
+  });
+
+  // Admin: aktuelle History abrufen (für Debug/Anzeige)
+  socket.on("getJeopardyHistory", () => {
+    socket.emit("jeopardyHistory", JeopardyGame.getHistory());
+  });
+
   // --- Hotzone Actions ---
 
   socket.on("submitClue", (clue) => {

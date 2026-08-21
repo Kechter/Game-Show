@@ -1,4 +1,5 @@
 const jeopardyThemes = require("./jeopardy_data");
+const QuestionHistory = require("./QuestionHistory");
 
 class JeopardyGame {
   constructor(room, theme = "allgemein") {
@@ -10,7 +11,53 @@ class JeopardyGame {
 
     // Pick 5 random categories from the theme pool
     const shuffled = [...allCategories].sort(() => Math.random() - 0.5);
-    const selectedCategories = shuffled.slice(0, 5);
+    const rawCategories = shuffled.slice(0, 5);
+
+    // For each category: pick 5 FRESH (unplayed) questions, remap to 100–500
+    const pointValues = [100, 200, 300, 400, 500];
+    const historyWarnings = []; // categories with critically low fresh question supply
+
+    // Store the question texts that were picked, so we can commit them on round completion
+    const pendingHistoryCommit = []; // [{ catName, questionTexts[] }]
+
+    const selectedCategories = rawCategories.map((cat) => {
+      const allQuestions = Object.values(cat.questions);
+      const played = QuestionHistory.getPlayedQuestions(theme, cat.name);
+
+      // Separate fresh vs. already-played questions
+      const fresh = allQuestions.filter(q => !played.has(q.q));
+      const stale = allQuestions.filter(q =>  played.has(q.q));
+
+      // Warn if fresh supply is critically low
+      if (fresh.length < 5) {
+        historyWarnings.push({
+          catName: cat.name,
+          freshLeft: fresh.length,
+          total: allQuestions.length,
+        });
+      }
+
+      // Use fresh questions first; if not enough, pad with stale ones
+      const shuffledFresh = [...fresh].sort(() => Math.random() - 0.5);
+      const shuffledStale = [...stale].sort(() => Math.random() - 0.5);
+      const pool = [...shuffledFresh, ...shuffledStale];
+      const picked = pool.slice(0, 5);
+
+      const remappedQuestions = {};
+      pointValues.forEach((pts, i) => {
+        remappedQuestions[pts] = picked[i];
+      });
+
+      // Remember what we picked so we can save it on round completion
+      pendingHistoryCommit.push({ catName: cat.name, questionTexts: picked.map(q => q.q) });
+
+      return { ...cat, questions: remappedQuestions };
+    });
+
+    // Store pending commit and warnings on the instance
+    this._theme = theme;
+    this._pendingHistoryCommit = pendingHistoryCommit;
+    this._historyWarnings = historyWarnings;
 
     this.state = {
       type: "jeopardy",
@@ -18,6 +65,8 @@ class JeopardyGame {
       theme: theme,
       themeLabel: themeData.label,
       categories: selectedCategories,
+      // History warnings (low fresh-question supply)
+      historyWarnings,
       // Track which questions are answered: { "KategorieName": [{ points: 100, teamId: 1, correct: true }] }
       answeredQuestions: {},
       scores: { 1: 0, 2: 0 },
@@ -30,8 +79,8 @@ class JeopardyGame {
       activeTeamId: 1, // Team 1 starts
 
       // Question state
-      currentQuestion: null, // { categoryIndex: 0, categoryName: "...", points: 200, q: "...", a: "..." }
-      roundPhase: "board", // 'board', 'question', 'answer'
+      currentQuestion: null, // { categoryIndex, categoryName, points, q, a, options }
+      roundPhase: "board", // 'board' | 'question' | 'answer'
     };
 
     // Initialize answered tracking
@@ -183,9 +232,8 @@ class JeopardyGame {
     this.state.answeredQuestions[this.state.currentQuestion.categoryName].push({
       points,
       teamId: this.state.activeTeamId,
-      correct: isCorrect
+      correct: isCorrect,
     });
-    
     this.state.answeredCount++;
 
     // Check if all questions have been answered
@@ -198,6 +246,7 @@ class JeopardyGame {
 
     if (allAnswered) {
       this.state.isActive = false;
+      this._commitHistory();
     }
 
     return { room: this.room, allAnswered };
@@ -208,24 +257,24 @@ class JeopardyGame {
     if (!this.canControl(playerId)) return { error: "Nicht berechtigt" };
 
     const isCorrect = (selectedOption === this.state.currentQuestion.a);
-    
-    // Evaluate points NOW
+
+    // Evaluate points immediately
     const points = parseInt(this.state.currentQuestion.points);
     if (isCorrect) {
       this.state.scores[this.state.activeTeamId] += points;
     }
-    
+
     this.state.answeredQuestions[this.state.currentQuestion.categoryName].push({
       points,
       teamId: this.state.activeTeamId,
-      correct: isCorrect
+      correct: isCorrect,
     });
     this.state.answeredCount++;
-    
+
     this.state.roundPhase = "answer";
     this.state.currentQuestion.selectedOption = selectedOption;
     this.state.currentQuestion.isEvaluated = true;
-    
+
     return { room: this.room };
   }
 
@@ -237,13 +286,24 @@ class JeopardyGame {
 
     if (allAnswered) {
       this.state.isActive = false;
+      this._commitHistory();
     }
 
     this.state.roundPhase = "board";
     this.state.currentQuestion = null;
     this.setNextActiveTeam();
-    
+
     return { room: this.room, allAnswered };
+  }
+
+  /**
+   * Commits the played questions to persistent history (only called on full round completion).
+   */
+  _commitHistory() {
+    for (const { catName, questionTexts } of this._pendingHistoryCommit) {
+      QuestionHistory.markQuestionsPlayed(this._theme, catName, questionTexts);
+    }
+    console.log(`[Jeopardy] History gespeichert für Theme '${this._theme}'.`);
   }
 
   // Proxy handlers for GameManager
@@ -263,6 +323,16 @@ class JeopardyGame {
       label: val.label,
       categoryCount: val.categories.length,
     }));
+  }
+
+  /** Setzt die Fragen-History für ein Theme (oder alle) zurück – nützlich für Admin. */
+  static resetHistory(theme) {
+    QuestionHistory.resetHistory(theme);
+  }
+
+  /** Gibt die vollständige History zurück (für Admin/Debug). */
+  static getHistory() {
+    return QuestionHistory.getFullHistory();
   }
 }
 

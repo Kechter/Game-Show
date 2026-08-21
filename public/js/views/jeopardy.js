@@ -114,7 +114,6 @@ export function renderJeopardy(gameState) {
   const turnBanner = document.getElementById("jeopardy-turn-banner");
   if (turnBanner) {
     if (state.isHost) {
-      // Host sees which team is active
       const teamColor = gameState.activeTeamId === 1 ? "🔴" : "🔵";
       turnBanner.className = "jeopardy-turn-banner my-turn";
       turnBanner.textContent = `${teamColor} ${gameState.activeTeamName} ist dran – Frage wählen!`;
@@ -165,8 +164,7 @@ export function renderJeopardy(gameState) {
 
     const q = gameState.currentQuestion;
     if (q) {
-      document.getElementById("jeopardy-category-label").textContent =
-        q.categoryName;
+      document.getElementById("jeopardy-category-label").textContent = q.categoryName;
       document.getElementById("jeopardy-points-label").textContent = q.points;
       document.getElementById("jeopardy-active-player-name").textContent =
         gameState.activeTeamName || "-";
@@ -230,7 +228,6 @@ export function renderJeopardy(gameState) {
             answerContainer.style.display = q.options ? "none" : "block";
           if (evalButtons) evalButtons.style.display = "none";
         } else {
-          // Always show answer + eval buttons to host or active team
           if (answerContainer) answerContainer.style.display = "block";
           if (answerText)
             answerText.style.display = q.options ? "none" : "block";

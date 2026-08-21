@@ -8,141 +8,144 @@ const jeopardyThemes = {
   allgemein: {
     label: "🌍 Allgemeinwissen",
     categories: [
+      // ---------- 1. Tech & Web ----------
       {
         name: "Tech & Web",
         questions: {
           100: { q: "Das 'S' in HTTPS steht für...", a: "Secure", options: ["System", "Server", "Secure", "Socket"] },
-          200: {
-            q: "Programmiersprache, die auch eine Schlange ist.",
-            a: "Python",
-          },
-          300: { q: "Erfinder des World Wide Web.", a: "Tim Berners-Lee", options: ["Steve Jobs", "Tim Berners-Lee", "Bill Gates", "Linus Torvalds"] },
-          400: {
-            q: "Kleines textbasiertes Datenstück, das Websites auf deinem PC speichern.",
-            a: "Cookie",
-          },
-          500: {
-            q: "Jahr, in dem das erste iPhone vorgestellt wurde.",
-            a: "2007",
-          },
+          200: { q: "Welche Programmiersprache trägt auch den Namen einer Schlange?", a: "Python", options: ["Java", "Python", "Ruby", "Cobra"] },
+          300: { q: "Wer hat das World Wide Web erfunden?", a: "Tim Berners-Lee", options: ["Steve Jobs", "Tim Berners-Lee", "Bill Gates", "Linus Torvalds"] },
+          400: { q: "Was ist ein 'Cookie' im Web-Kontext?", a: "Ein kleines Datenstück, das Websites im Browser speichern" },
+          500: { q: "In welchem Jahr wurde das erste iPhone vorgestellt?", a: "2007", options: ["2005", "2007", "2009", "2010"] },
+          600: { q: "Was bedeutet die Abkürzung 'API'?", a: "Application Programming Interface" },
+          700: { q: "Welches Protokoll wird für den Versand von E-Mails verwendet (ausgehend)?", a: "SMTP (Simple Mail Transfer Protocol)" },
+          800: { q: "Was ist der Unterschied zwischen RAM und ROM?", a: "RAM ist flüchtiger Arbeitsspeicher, ROM ist dauerhafter Nur-Lese-Speicher" },
         },
       },
+      // ---------- 2. Welt & Geografie ----------
       {
-        name: "Welt & Reise",
+        name: "Welt & Geografie",
         questions: {
           100: { q: "Hauptstadt von Frankreich.", a: "Paris", options: ["London", "Rom", "Berlin", "Paris"] },
-          200: { q: "Höchster Berg der Welt.", a: "Mount Everest" },
-          300: { q: "Längster Fluss in Südamerika.", a: "Amazonas" },
-          400: {
-            q: "Land mit den meisten Einwohnern (Stand 2023).",
-            a: "Indien",
-          },
-          500: { q: "Währung in Japan.", a: "Yen" },
+          200: { q: "Höchster Berg der Welt.", a: "Mount Everest", options: ["K2", "Mount Everest", "Mont Blanc", "Kilimandscharo"] },
+          300: { q: "Längster Fluss der Welt.", a: "Nil (oder Amazonas, je nach Messung)", options: ["Amazonas", "Nil", "Jangtse", "Mississippi"] },
+          400: { q: "Welches Land hat die meisten Einwohner (Stand 2023)?", a: "Indien", options: ["China", "Indien", "USA", "Indonesien"] },
+          500: { q: "Welcher Kontinent ist der größte nach Fläche?", a: "Asien" },
+          600: { q: "Wie heißt das kleinste Land der Welt nach Fläche?", a: "Vatikanstadt" },
+          700: { q: "Durch wie viele Länder fließt die Donau?", a: "10 Länder" },
+          800: { q: "Welche Meerenge trennt Europa von Afrika und verbindet Atlantik mit Mittelmeer?", a: "Straße von Gibraltar" },
         },
       },
-      {
-        name: "Film & Serie",
-        questions: {
-          100: { q: "Der Vater von Luke Skywalker.", a: "Darth Vader" },
-          200: {
-            q: "Serie über eine Gruppe Freunde in New York (Café Central Perk).",
-            a: "Friends",
-          },
-          300: { q: "Schauspieler von Iron Man.", a: "Robert Downey Jr." },
-          400: {
-            q: "Name von Simbas bösem Onkel in König der Löwen.",
-            a: "Scar",
-          },
-          500: {
-            q: "Regisseur von Inception und The Dark Knight.",
-            a: "Christopher Nolan",
-          },
-        },
-      },
-      {
-        name: "Unnützes Wissen",
-        questions: {
-          100: { q: "Farbe der Blackbox in Flugzeugen.", a: "Orange" },
-          200: { q: "Einzige Stadt auf zwei Kontinenten.", a: "Istanbul" },
-          300: { q: "Tier mit dem größten Gehirn.", a: "Pottwal" },
-          400: { q: "Wie viele Herzen hat ein Oktopus?", a: "Drei" },
-          500: {
-            q: "Land, in dem es verboten ist, Kaugummi zu kauen (außer medizinisch).",
-            a: "Singapur",
-          },
-        },
-      },
-      {
-        name: "Sport & Spiel",
-        questions: {
-          100: { q: "Sportgerät beim Badminton.", a: "Federball" },
-          200: {
-            q: "Anzahl der Spieler in einer Fußballmannschaft auf dem Feld.",
-            a: "11",
-          },
-          300: {
-            q: "Höchste Punktzahl beim Bowling (Perfect Game).",
-            a: "300",
-          },
-          400: {
-            q: "Farbe des Trikots des Führenden bei der Tour de France.",
-            a: "Gelb",
-          },
-          500: { q: "Stadt der Olympischen Sommerspiele 2024.", a: "Paris" },
-        },
-      },
-      {
-        name: "Musik",
-        questions: {
-          100: {
-            q: "Sängerin von 'Bad Guy' und 'Happier Than Ever'.",
-            a: "Billie Eilish",
-          },
-          200: { q: "Band, die 'Bohemian Rhapsody' gesungen hat.", a: "Queen" },
-          300: { q: "Wie viele Saiten hat eine Standard-Gitarre?", a: "6" },
-          400: {
-            q: "Deutscher Rapper, bekannt für 'Bombe' und 'Moonlight'.",
-            a: "Capital Bra / Apache 207",
-          },
-          500: {
-            q: "Welches Instrument spielt Beethoven hauptsächlich?",
-            a: "Klavier",
-          },
-        },
-      },
+      // ---------- 3. Geschichte ----------
       {
         name: "Geschichte",
         questions: {
-          100: { q: "In welchem Jahr fiel die Berliner Mauer?", a: "1989" },
-          200: {
-            q: "Wer war der erste Mensch auf dem Mond?",
-            a: "Neil Armstrong",
-          },
-          300: { q: "Welches Schiff sank 1912 im Atlantik?", a: "Titanic" },
-          400: {
-            q: "Wie hieß der letzte ägyptische Pharao (weiblich)?",
-            a: "Kleopatra",
-          },
-          500: { q: "In welchem Jahr endete der Zweite Weltkrieg?", a: "1945" },
+          100: { q: "In welchem Jahr fiel die Berliner Mauer?", a: "1989", options: ["1985", "1989", "1991", "1993"] },
+          200: { q: "Wer war der erste Mensch auf dem Mond?", a: "Neil Armstrong", options: ["Buzz Aldrin", "Yuri Gagarin", "Neil Armstrong", "John Glenn"] },
+          300: { q: "Welches Schiff sank 1912 nach dem Zusammenstoß mit einem Eisberg?", a: "Titanic" },
+          400: { q: "In welchem Jahr endete der Zweite Weltkrieg?", a: "1945", options: ["1943", "1944", "1945", "1946"] },
+          500: { q: "Welcher Kaiser ließ den Eiffelturm bauen?", a: "Niemand – er wurde für die Weltausstellung 1889 ohne kaiserlichen Auftrag gebaut (Gustave Eiffel)" },
+          600: { q: "In welchem Jahr begann die Französische Revolution?", a: "1789" },
+          700: { q: "Wer war der erste gewählte Präsident der USA?", a: "George Washington" },
+          800: { q: "Welches antike Weltwunder steht noch heute weitgehend intakt?", a: "Die Pyramiden von Gizeh (Cheops-Pyramide)" },
         },
       },
+      // ---------- 4. Wissenschaft & Natur ----------
       {
-        name: "Essen & Trinken",
+        name: "Wissenschaft & Natur",
         questions: {
-          100: { q: "Aus welchem Land kommt Pizza?", a: "Italien" },
-          200: {
-            q: "Welche Frucht ist die Hauptzutat in Guacamole?",
-            a: "Avocado",
-          },
+          100: { q: "Schnellstes Landtier der Welt.", a: "Gepard", options: ["Löwe", "Gepard", "Puma", "Antilope"] },
+          200: { q: "Chemisches Symbol für Gold.", a: "Au", options: ["Go", "Au", "Ag", "Gd"] },
+          300: { q: "Wie viele Planeten hat unser Sonnensystem?", a: "8", options: ["7", "8", "9", "10"] },
+          400: { q: "Was ist ein Schwarzes Loch?", a: "Ein Bereich im Weltraum mit so extremer Gravitation, dass nichts – nicht mal Licht – entkommt" },
+          500: { q: "Welches Element ist das häufigste im Universum?", a: "Wasserstoff (H)", options: ["Sauerstoff", "Helium", "Wasserstoff", "Kohlenstoff"] },
+          600: { q: "Was besagt Newtons drittes Gesetz (Actio und Reactio)?", a: "Jede Kraft hat eine gleich große, entgegengesetzte Gegenkraft" },
+          700: { q: "Wie lautet die Formel von Einsteins berühmtester Gleichung?", a: "E = mc²" },
+          800: { q: "Was ist der Unterschied zwischen Fusion und Fission in der Kernphysik?", a: "Fusion: Atomkerne verschmelzen (Sonne). Fission: Atomkerne spalten sich (Kernkraftwerk)" },
+        },
+      },
+      // ---------- 5. Film & Serien ----------
+      {
+        name: "Film & Serien",
+        questions: {
+          100: { q: "Der Vater von Luke Skywalker.", a: "Darth Vader", options: ["Obi-Wan Kenobi", "Darth Vader", "Palpatine", "Han Solo"] },
+          200: { q: "Serie über eine Freundesgruppe in New York (Café Central Perk).", a: "Friends" },
+          300: { q: "Welcher Schauspieler spielt Iron Man / Tony Stark?", a: "Robert Downey Jr." },
+          400: { q: "Regisseur von Inception, Interstellar und The Dark Knight.", a: "Christopher Nolan" },
+          500: { q: "In welchem Film taucht der Begriff 'Rosebud' als mysteriöser letzter Atemzug auf?", a: "Citizen Kane" },
+          600: { q: "Welche Serie dreht sich um einen Chemielehrer, der zum Drogenproduenten wird?", a: "Breaking Bad" },
+          700: { q: "Welcher Film gewann den Oscar für den besten Film 2024?", a: "Oppenheimer" },
+          800: { q: "Wer hat die Trilogie 'Der Herr der Ringe' als Regisseur umgesetzt, und in welchem Land wurde sie hauptsächlich gedreht?", a: "Peter Jackson, Neuseeland" },
+        },
+      },
+      // ---------- 6. Musik ----------
+      {
+        name: "Musik",
+        questions: {
+          100: { q: "Sängerin von 'Bad Guy' und 'Happier Than Ever'.", a: "Billie Eilish", options: ["Dua Lipa", "Billie Eilish", "Ariana Grande", "Olivia Rodrigo"] },
+          200: { q: "Welche Band hat 'Bohemian Rhapsody' gesungen?", a: "Queen", options: ["The Beatles", "Queen", "Led Zeppelin", "Rolling Stones"] },
+          300: { q: "Wie viele Saiten hat eine Standard-Gitarre?", a: "6", options: ["4", "6", "7", "8"] },
+          400: { q: "Welches Instrument hat Beethoven hauptsächlich gespielt?", a: "Klavier" },
+          500: { q: "Wann wurde Michael Jackson geboren (Jahr)?", a: "1958", options: ["1954", "1958", "1962", "1966"] },
+          600: { q: "Welche Oper endet mit dem Tod der Hauptfigur durch Tuberkulose (La Traviata Pendant)?", a: "La Bohème (Giacomo Puccini)" },
+          700: { q: "In welcher Stadt wurde der Jazz Anfang des 20. Jahrhunderts als Musikrichtung geboren?", a: "New Orleans" },
+          800: { q: "Was unterscheidet Dur von Moll in der Musiktheorie und welche Grundstimmung erzeugen sie typischerweise?", a: "Dur klingt hell/fröhlich, Moll klingt dunkel/traurig – basiert auf unterschiedlichen Intervallabständen" },
+        },
+      },
+      // ---------- 7. Essen & Kulinarik ----------
+      {
+        name: "Essen & Kulinarik",
+        questions: {
+          100: { q: "Aus welchem Land kommt Pizza?", a: "Italien", options: ["Griechenland", "Spanien", "Italien", "Türkei"] },
+          200: { q: "Welche Frucht ist die Hauptzutat in Guacamole?", a: "Avocado" },
           300: { q: "Wie heißt der japanische Reiswein?", a: "Sake" },
-          400: {
-            q: "Welches Land produziert am meisten Kaffee?",
-            a: "Brasilien",
-          },
-          500: {
-            q: "Was ist Scoville? (Einheit für...)",
-            a: "Schärfe von Chilis",
-          },
+          400: { q: "Welches Land produziert weltweit am meisten Kaffee?", a: "Brasilien", options: ["Kolumbien", "Äthiopien", "Brasilien", "Vietnam"] },
+          500: { q: "Was misst die Scoville-Skala?", a: "Die Schärfe von Chilischoten (Capsaicin-Gehalt)" },
+          600: { q: "Was ist der Unterschied zwischen Espresso und Americano?", a: "Americano ist ein Espresso, der mit heißem Wasser verlängert wird" },
+          700: { q: "Welche Käsesorte ist für Fondue traditionell und aus welcher Region stammt er?", a: "Gruyère (Schweiz, Kanton Freiburg)" },
+          800: { q: "Was ist 'Maillard-Reaktion' beim Kochen und warum ist sie für Aromen entscheidend?", a: "Chemische Reaktion zwischen Aminosäuren und Zucker bei hoher Hitze – erzeugt braune Kruste und Röstaromen" },
+        },
+      },
+      // ---------- 8. Sport & Rekorde ----------
+      {
+        name: "Sport & Rekorde",
+        questions: {
+          100: { q: "Wie viele Spieler stehen in einer Fußballmannschaft auf dem Feld?", a: "11", options: ["9", "10", "11", "12"] },
+          200: { q: "Farbe des Führungstrikots bei der Tour de France.", a: "Gelb", options: ["Grün", "Gelb", "Weiß", "Gepunktet"] },
+          300: { q: "Wo fanden die Olympischen Sommerspiele 2024 statt?", a: "Paris" },
+          400: { q: "Welcher Fußballer hat die meisten Weltmeisterschaften gewonnen (4 Titel)?", a: "Pelé" },
+          500: { q: "Welcher Athlet hat die meisten Olympischen Goldmedaillen aller Zeiten gewonnen?", a: "Michael Phelps (23 Goldmedaillen)" },
+          600: { q: "In welchem Land wurde Fußball als moderner Sport erfunden?", a: "England (1863, Gründung der Football Association)" },
+          700: { q: "Wie viele Punkte bekommt man beim Bowling für ein 'Perfect Game' (300 Punkte) – erkläre wie es funktioniert.", a: "12 Strikes hintereinander = 300 Punkte" },
+          800: { q: "Was bedeutet 'Salchow' im Eiskunstlauf und wer hat diesen Sprung erfunden?", a: "Ein Sprung mit Absprung von der Innenrolle des linken Fußes – erfunden von Ulrich Salchow (Schweden, 1909)" },
+        },
+      },
+      // ---------- 9. Unnützes Wissen ----------
+      {
+        name: "Unnützes Wissen",
+        questions: {
+          100: { q: "Welche Farbe haben Flugzeug-Blackboxen wirklich?", a: "Orange", options: ["Schwarz", "Orange", "Rot", "Grau"] },
+          200: { q: "Welche Stadt liegt auf zwei Kontinenten?", a: "Istanbul", options: ["Kairo", "Istanbul", "Moskau", "Athen"] },
+          300: { q: "Welches Tier hat das größte Gehirn?", a: "Pottwal" },
+          400: { q: "Wie viele Herzen hat ein Oktopus?", a: "3 (ein Systemherz + zwei Kiemenherzen)", options: ["1", "2", "3", "4"] },
+          500: { q: "In welchem Land ist es verboten, Kaugummi zu kauen (außer medizinisch)?", a: "Singapur" },
+          600: { q: "Wie lange schläft eine Schnecke im Durchschnitt am Stück, wenn die Bedingungen ungünstig sind?", a: "Bis zu 3 Jahre" },
+          700: { q: "Warum kann man auf dem Mond keinen Schall hören, selbst wenn eine Explosion stattfindet?", a: "Weil der Mond kein Medium (keine Luft/Atmosphäre) hat – Schall braucht ein Medium zur Ausbreitung" },
+          800: { q: "Was ist 'Petrichor' und warum riecht es nach Regen so charakteristisch?", a: "Der erdige Geruch nach Regen – ausgelöst durch Geosmin, das Bakterien (Actinomyceten) beim Zerfall von organischem Material produzieren" },
+        },
+      },
+      // ---------- 10. Sprache & Literatur ----------
+      {
+        name: "Sprache & Literatur",
+        questions: {
+          100: { q: "Wie viele Buchstaben hat das deutsche Alphabet (inkl. Umlaute und ß)?", a: "30 (26 + Ä, Ö, Ü, ß)", options: ["26", "28", "29", "30"] },
+          200: { q: "Wer schrieb 'Faust – Der Tragödie erster Teil'?", a: "Johann Wolfgang von Goethe", options: ["Schiller", "Goethe", "Heine", "Kafka"] },
+          300: { q: "In welcher Sprache wurde 'Don Quijote' ursprünglich geschrieben?", a: "Spanisch" },
+          400: { q: "Was bedeutet das lateinische Sprichwort 'Carpe Diem'?", a: "Ergreife den Tag / Nutze den Moment" },
+          500: { q: "Welches Buch beginnt mit dem Satz: 'Es war die beste Zeit, es war die schlimmste Zeit'?", a: "Eine Geschichte aus zwei Städten (A Tale of Two Cities) von Charles Dickens" },
+          600: { q: "Was unterscheidet eine Metapher von einem Vergleich (Simile)?", a: "Metapher überträgt direkt ('Das Leben ist ein Traum'), Vergleich nutzt 'wie' ('Das Leben ist wie ein Traum')" },
+          700: { q: "Welches Werk von Franz Kafka beschreibt einen Mann, der eines Morgens als Ungeziefer aufwacht?", a: "Die Verwandlung (1915)" },
+          800: { q: "Was ist der Unterschied zwischen Denotation und Konnotation in der Sprachwissenschaft? Gib je ein Beispiel.", a: "Denotation = wörtliche Bedeutung (Schlange = Reptil), Konnotation = assoziative Bedeutung (Schlange = Verrat, Gefahr)" },
         },
       },
     ],
@@ -782,6 +785,63 @@ const jeopardyThemes = {
             q: "Wer gilt als Erfinder des Buchdrucks in Europa?",
             a: "Johannes Gutenberg",
           },
+        },
+      },
+    ],
+  },
+
+  // ===== STAMMTISCH =====
+  stammtisch: {
+    label: "🍻 Stammtisch",
+    categories: [
+      {
+        name: "Allgemeinwissen",
+        questions: {
+          100: { q: "Was ist die Hauptstadt von Australien?", a: "Canberra" },
+          200: { q: "Wie heißt die Meerenge zwischen Europa und Afrika?", a: "Straße von Gibraltar" },
+          300: { q: "Welches Land wird auch als „Land der tausend Seen“ bezeichnet?", a: "Finnland" },
+          400: { q: "Wie heißt die Wissenschaft von den Pilzen?", a: "Mykologie" },
+          500: { q: "Welches Land hat als einziges eine Flagge, die nicht rechteckig ist?", a: "Nepal" },
+        },
+      },
+      {
+        name: "Musik",
+        questions: {
+          100: { q: "Nenne einen Song von Mark Forster", a: "Gültiger Song (z.B. Chöre, Au Revoir)" },
+          200: { q: "Von wem ist dieser Song?", a: "Flo Rida feat. T-Pain" },
+          300: { q: "Welcher Künstler veröffentlichte das Album „Divide“?", a: "Ed Sheeran" },
+          400: { q: "Wie heißt dieses Lied?", a: "Axel F (Crazy Frog)" },
+          500: { q: "Welches Lied startet mit dem Satz „I used to rule the world“?", a: "Coldplay – Viva la Vida" },
+        },
+      },
+      {
+        name: "Filme/ Serien",
+        questions: {
+          100: { q: "In welcher Serie sparen zwei sehr unterschiedliche Mädels um ein eigenes Cupcake Geschäft zu eröffnen?", a: "2 Broke Girls" },
+          200: { q: "Welchen Film beschreibt diese Emoji Reihe? 👨‍🔬🦖🏝️", a: "Jurassic Park" },
+          300: { q: "Welche Serie gehört zu dieser Beschreibung: Menschen verbringen mehrere Staffeln damit, eine Tür nicht zu öffnen.", a: "Lost" },
+          400: { q: "Aus welchem Film stammt das Zitat: 'Das Leben ist wie eine Schachtel Pralinen.'", a: "Forrest Gump" },
+          500: { q: "Welche Schauspielerin hat in all diesen Filmen mitgespielt: 1. The Devil Wears Prada, 2. Les Misérables, 3. Interstellar, 4. The Dark Knight Rises, 5. Alice in Wonderland", a: "Anne Hathaway" },
+        },
+      },
+      {
+        name: "Stammtisch",
+        questions: {
+          100: { q: "Von wem kam letztes Jahr die Idee, Tanga wichteln zu machen?", a: "Clara", options: ["Clara", "Lena", "Annika", "Jean"] },
+          200: { q: "Was war Bennis Antwort auf die Frage von Paul, welche Backblech Größe man zum Stammtisch Plätzchen backen mitbringen soll?", a: "6x2 Meter", options: ["rund", "30x30", "6x2 Meter", "so groß wie geht"] },
+          300: { q: "Wer ist nicht in der Stammtisch WhatsApp Gruppe?", a: "Chris", options: ["Lexi", "Nici", "Chris", "Eli"] },
+          400: { q: "Wann wurde die Stammtisch WhatsApp Gruppe erstellt (damals noch unter anderem Namen)?", a: "05.11.2022", options: ["02.03.2023", "18.09.2022", "05.11.2022", "25.06.2023"] },
+          500: { q: "Wie viele Bilder hängen an der Kork Wand in Jans Keller? (+/- 10 Bilder)", a: "Ergebnis wird vor Ort aufgelöst!" },
+        },
+      },
+      {
+        name: "Challenges",
+        questions: {
+          100: { q: "Stellt euch sortiert nach dem Tag und Monat an dem ihr geboren seid auf, aber ohne zu reden.", a: "Challenge bestanden!" },
+          200: { q: "Macht als Gruppe 100 Liegestützen.", a: "Challenge bestanden!" },
+          300: { q: "Erratet in 3 Minuten 10 Tabu Karten Begriffe.", a: "Challenge bestanden!" },
+          400: { q: "Erklärt zu dritt der vierten Person in eurem Team ein Wort, jeder darf der Reihe nach immer nur ein Wort sagen.", a: "Challenge bestanden!" },
+          500: { q: "Ihr bekommt 4 Becher mit unterschiedlichem Alkoholgehalt. Sortiert euch von 'wenig Alkohol' zu 'viel Alkohol' nur indem ihr euer eigenes Getränk probiert.", a: "Challenge bestanden!" },
         },
       },
     ],

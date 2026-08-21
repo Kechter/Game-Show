@@ -1,0 +1,39 @@
+{
+  "allgemein": {
+    "Unnützes Wissen": [
+      "Welche Stadt liegt auf zwei Kontinenten?",
+      "In welchem Land ist es verboten, Kaugummi zu kauen (außer medizinisch)?",
+      "Wie viele Herzen hat ein Oktopus?",
+      "Was ist 'Petrichor' und warum riecht es nach Regen so charakteristisch?",
+      "Wie lange schläft eine Schnecke im Durchschnitt am Stück, wenn die Bedingungen ungünstig sind?"
+    ],
+    "Essen & Kulinarik": [
+      "Aus welchem Land kommt Pizza?",
+      "Was misst die Scoville-Skala?",
+      "Welches Land produziert weltweit am meisten Kaffee?",
+      "Welche Käsesorte ist für Fondue traditionell und aus welcher Region stammt er?",
+      "Welche Frucht ist die Hauptzutat in Guacamole?"
+    ],
+    "Film & Serien": [
+      "Serie über eine Freundesgruppe in New York (Café Central Perk).",
+      "Regisseur von Inception, Interstellar und The Dark Knight.",
+      "In welchem Film taucht der Begriff 'Rosebud' als mysteriöser letzter Atemzug auf?",
+      "Der Vater von Luke Skywalker.",
+      "Welche Serie dreht sich um einen Chemielehrer, der zum Drogenproduenten wird?"
+    ],
+    "Wissenschaft & Natur": [
+      "Wie viele Planeten hat unser Sonnensystem?",
+      "Chemisches Symbol für Gold.",
+      "Was besagt Newtons drittes Gesetz (Actio und Reactio)?",
+      "Was ist der Unterschied zwischen Fusion und Fission in der Kernphysik?",
+      "Welches Element ist das häufigste im Universum?"
+    ],
+    "Sport & Rekorde": [
+      "Was bedeutet 'Salchow' im Eiskunstlauf und wer hat diesen Sprung erfunden?",
+      "Wie viele Spieler stehen in einer Fußballmannschaft auf dem Feld?",
+      "Wie viele Punkte bekommt man beim Bowling für ein 'Perfect Game' (300 Punkte) – erkläre wie es funktioniert.",
+      "Farbe des Führungstrikots bei der Tour de France.",
+      "In welchem Land wurde Fußball als moderner Sport erfunden?"
+    ]
+  }
+}
