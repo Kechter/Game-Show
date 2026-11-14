@@ -58,7 +58,11 @@ export function initJeopardy(socket) {
 
   // Back to board
   document.getElementById("back-to-board-btn").addEventListener("click", () => {
-    socket.emit("continueToBoard");
+    if (state.currentRoom?.roundPhase === "question") {
+      socket.emit("adminResetRound");
+    } else {
+      socket.emit("continueToBoard");
+    }
   });
 
   // Team switcher buttons (host-only Jeopardy)
@@ -173,6 +177,7 @@ export function renderJeopardy(gameState) {
       const answerContainer = document.getElementById("evaluation-controls");
       const answerText = document.getElementById("jeopardy-answer-text");
       const revealBtn = document.getElementById("reveal-answer-btn");
+      const backToBoardBtn = document.getElementById("back-to-board-btn");
       const actions = document.getElementById("jeopardy-actions");
       const evalButtons = document.getElementById("eval-buttons");
 
@@ -215,13 +220,17 @@ export function renderJeopardy(gameState) {
 
         if (state.isPresentation) {
           if (revealBtn) revealBtn.style.display = "none";
+          if (backToBoardBtn) backToBoardBtn.style.display = "none";
         } else {
           if (revealBtn)
             revealBtn.style.display = canControl ? "inline-block" : "none";
+          if (backToBoardBtn)
+            backToBoardBtn.style.display = state.isHost ? "inline-block" : "none";
         }
       } else if (gameState.roundPhase === "answer") {
         if (answerText) answerText.textContent = q.a;
         if (revealBtn) revealBtn.style.display = "none";
+        if (backToBoardBtn) backToBoardBtn.style.display = "none";
 
         if (state.isPresentation) {
           if (answerContainer)
@@ -233,6 +242,11 @@ export function renderJeopardy(gameState) {
             answerText.style.display = q.options ? "none" : "block";
           if (evalButtons)
             evalButtons.style.display = canControl ? "flex" : "none";
+          const evalCorrectBtn = document.getElementById("eval-correct");
+          const evalWrongBtn = document.getElementById("eval-wrong");
+          const pts = parseInt(q.points, 10) || 0;
+          if (evalCorrectBtn) evalCorrectBtn.textContent = `✅ Richtig (+${pts})`;
+          if (evalWrongBtn) evalWrongBtn.textContent = `❌ Falsch (-${Math.floor(pts / 2)})`;
         }
       }
 
@@ -269,6 +283,7 @@ export function renderJeopardyScoreboard(gameState) {
 export function renderJeopardyBoard(gameState, isMyTurn) {
   const board = document.getElementById("jeopardy-board");
   board.innerHTML = "";
+  board.style.gridTemplateColumns = `repeat(${gameState.categories.length}, 1fr)`;
 
   gameState.categories.forEach((cat, catIndex) => {
     const col = document.createElement("div");

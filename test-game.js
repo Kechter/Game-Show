@@ -472,38 +472,114 @@ async function testJeopardyFullGame() {
     assert(statesA[0].roundPhase === "answer", "Phase wechselt zu 'answer'");
 
     // Evaluate: correct answer
-    const scoreBefore = statesA[0].scores[activeSocket.id] || 0;
+    const activeTeamBefore = statesA[0].activeTeamId;
+    const scoreBefore = statesA[0].scores[activeTeamBefore] || 0;
     activeSocket.emit("evaluateAnswer", true);
     const statesEval = await Promise.all(
       allSockets.map((s) => waitFor(s, "gameState")),
     );
     assert(statesEval[0].roundPhase === "board", "Zurück zum Board");
-    const scoreAfter = statesEval[0].scores[allSockets[activeIdx].id] || 0;
-    // Note: after evaluation, active player may change, but score should be updated
-    assert(scoreAfter >= scoreBefore, "Punkte wurden gutgeschrieben");
+    const scoreAfter = statesEval[0].scores[activeTeamBefore] || 0;
+    assert(
+      scoreAfter === scoreBefore + 100,
+      "Punkte wurden dem aktiven Team gutgeschrieben",
+    );
 
     // Check that question is marked as answered
     const cat0Name = statesEval[0].categories[0].name;
     assert(
-      statesEval[0].answeredQuestions[cat0Name].includes(100),
+      statesEval[0].answeredQuestions[cat0Name].some(
+        (entry) => entry.points === 100 && entry.teamId === activeTeamBefore && entry.correct === true,
+      ),
       "Frage als beantwortet markiert",
     );
 
-    // Wrong player tries to select
-    const wrongIdx = activeIdx === 0 ? 1 : 0;
-    // The new active player after evaluation
+    // Non-host player without active team tries to select
     const newActiveIdx = statesEval.findIndex((s) => s.isMyTurn);
     if (newActiveIdx >= 0) {
       const wrongSocket = allSockets.find((_, i) => i !== newActiveIdx);
       wrongSocket.emit("selectQuestion", { categoryIndex: 1, points: 200 });
       const errorMsg = await waitFor(wrongSocket, "error");
       assert(
-        errorMsg === "Nicht dein Zug!",
+        errorMsg === "Nicht der Zug deines Teams!",
         "Falscher Spieler bei Jeopardy abgelehnt",
       );
     }
 
     assert(true, "Jeopardy Grundablauf funktioniert");
+  } finally {
+    disconnectAll(sockets);
+  }
+}
+
+/**
+ * TEST 5b: Host-Only Geburtstags-Quiz (Fixed Order + Reset Round + Admin Score)
+ */
+async function testHostOnlyBirthdayJeopardy() {
+  console.log("\n🎂 Test: Host-Only Geburtstags-Quiz");
+  console.log("─".repeat(50));
+
+  const host = createSocket("Host");
+  const sockets = [host];
+
+  try {
+    await waitConnected(sockets);
+
+    host.emit("createRoom", "Host", false);
+    const room = await waitFor(host, "roomCreated");
+    assert(room && room.code, `Host-Only Raum erstellt: ${room.code}`);
+
+    host.emit("startGame", { gameType: "jeopardy", theme: "geburtstag" });
+    const state1 = await waitFor(host, "gameState");
+
+    assert(state1.type === "jeopardy", "Spieltyp ist Jeopardy");
+    assert(state1.theme === "geburtstag", "Theme ist 'geburtstag'");
+    assert(state1.categories.length === 6, "6 Kategorien geladen");
+    assert(state1.totalQuestions === 30, "30 Fragen insgesamt geladen");
+    assert(
+      state1.categories.map((c) => c.name).join(",") ===
+        "Familie,Challenges,Essen & Trinken,Musik,Filme / Serien,Geografie",
+      "Kategorien behalten exakt ihre Reihenfolge",
+    );
+    assert(
+      state1.categories[0].questions[100].q === "Was ist keine Sache, die Carolin hasst?" &&
+        state1.categories[5].questions[500].a === "Zehn",
+      "Fragen behalten exakt ihre Punkte-Zuordnung (100–500)",
+    );
+
+    // Select a question and test adminResetRound ("Zurück zum Board")
+    host.emit("selectQuestion", { categoryIndex: 0, points: 300 });
+    const stateQ = await waitFor(host, "gameState");
+    assert(stateQ.roundPhase === "question", "Frage geöffnet");
+
+    host.emit("adminResetRound");
+    const stateReset = await waitFor(host, "gameState");
+    assert(stateReset.roundPhase === "board", "Zurück zum Board per Reset");
+    assert(
+      stateReset.answeredQuestions["Familie"].length === 0,
+      "Zurückgesetzte Frage nicht als beantwortet markiert",
+    );
+
+    // Switch team & adjust score
+    host.emit("switchActiveTeam", 2);
+    const stateSwitch = await waitFor(host, "gameState");
+    assert(stateSwitch.activeTeamId === 2, "Aktives Team auf Team Blau gewechselt");
+
+    host.emit("adminAdjustScore", { targetId: "2", amount: 100 });
+    const stateAdj = await waitFor(host, "gameState");
+    assert(stateAdj.scores[2] === 100, "Admin-Score für Team Blau (+100) funktioniert");
+
+    // Wrong answer penalty: loses half the points (300 -> -150)
+    host.emit("selectQuestion", { categoryIndex: 0, points: 300 });
+    await waitFor(host, "gameState");
+    host.emit("revealAnswer");
+    await waitFor(host, "gameState");
+    host.emit("evaluateAnswer", false);
+    const stateWrong = await waitFor(host, "gameState");
+    assert(
+      stateWrong.scores[2] === -50,
+      "Falsche 300er-Antwort zieht Team Blau die Hälfte ab (100 - 150 = -50)",
+    );
   } finally {
     disconnectAll(sockets);
   }
@@ -844,6 +920,7 @@ async function runAllTests() {
     await testAutoAssign();
     await testHotzoneFullGame();
     await testJeopardyFullGame();
+    await testHostOnlyBirthdayJeopardy();
     await testAdminActions();
     await testRestartGame();
     await testLeaveRoom();

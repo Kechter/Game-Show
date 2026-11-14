@@ -87,7 +87,12 @@ export function initLobby(socket) {
   // Start game
   document.getElementById("start-game-btn").addEventListener("click", () => {
     const gameType = document.getElementById("game-selector").value;
-    socket.emit("startGame", gameType);
+    if (gameType === "jeopardy") {
+      const theme = document.getElementById("theme-select")?.value;
+      socket.emit("startGame", { gameType, theme });
+    } else {
+      socket.emit("startGame", gameType);
+    }
   });
 
   // Theme selector change (host only)
@@ -97,6 +102,7 @@ export function initLobby(socket) {
 
   // Game selector change – toggle theme selector + update waiting room UI
   document.getElementById("game-selector").addEventListener("change", (e) => {
+    state.currentGameType = e.target.value;
     const themeSelector = document.getElementById("jeopardy-theme-selector");
     if (themeSelector) {
       themeSelector.style.display =

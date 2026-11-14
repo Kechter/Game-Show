@@ -41,6 +41,8 @@ export function registerSocketEvents(socket) {
     state.currentRoom = room;
     state.currentRoomCode = room.code;
     state.isHost = true;
+    state.currentGameType =
+      document.getElementById("game-selector")?.value || "jeopardy";
 
     document.getElementById("display-room-code").textContent = room.code;
     updateWaitingRoom(room);
@@ -147,6 +149,14 @@ export function registerSocketEvents(socket) {
     if (hotzoneSection) {
       hotzoneSection.style.display =
         gameState.type === "hotzone" ? "block" : "none";
+    }
+
+    const jeopardyScoreSection = document.getElementById(
+      "admin-jeopardy-score-section",
+    );
+    if (jeopardyScoreSection) {
+      jeopardyScoreSection.style.display =
+        gameState.type === "jeopardy" ? "block" : "none";
     }
   });
 

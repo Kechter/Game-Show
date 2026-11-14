@@ -31,8 +31,8 @@
                     <div class="input-group">
                         <label for="game-selector">Spiel wählen</label>
                         <select id="game-selector" class="select-input">
+                            <option value="jeopardy" selected>🧠 Jeopardy</option>
                             <option value="hotzone">🔥 Hotzone</option>
-                            <option value="jeopardy">🧠 Jeopardy</option>
                         </select>
                     </div>
 
@@ -110,7 +110,7 @@
                         style="color: var(--text-secondary); font-size: 14px; margin-bottom: 6px; display: block;">🎯
                         Jeopardy Thema</label>
                     <select id="theme-select" class="select-input">
-                        <option value="allgemein">🌍 Allgemeinwissen</option>
+                        <option value="geburtstag">🎂 Mama Geburtstag Quiz</option>
                     </select>
                 </div>
                 <button id="auto-assign-btn" class="btn btn-secondary">
@@ -279,7 +279,7 @@
                                 <div id="jeopardy-answer-text">ANTWORT</div>
                                 <div id="eval-buttons">
                                     <button id="eval-correct" class="btn btn-correct">✅ Richtig (+Punkte)</button>
-                                    <button id="eval-wrong" class="btn btn-wrong">❌ Falsch (0 Punkte)</button>
+                                    <button id="eval-wrong" class="btn btn-wrong">❌ Falsch (-½ Punkte)</button>
                                 </div>
                             </div>
                         </div>
@@ -345,6 +345,22 @@
                 <div style="display: flex; gap: 8px;">
                     <button onclick="adminAdjustScore('2', 1)" class="btn btn-small" style="flex:1">🔵 +1</button>
                     <button onclick="adminAdjustScore('2', -1)" class="btn btn-small" style="flex:1">🔵 -1</button>
+                </div>
+            </div>
+
+            <div class="admin-section" id="admin-jeopardy-score-section" style="display: none;">
+                <h4>Team-Punkte</h4>
+                <div style="display: flex; gap: 8px; margin-bottom: 8px;">
+                    <button onclick="adminAdjustScore('1', 100)" class="btn btn-small" style="flex:1">🔴 +100</button>
+                    <button onclick="adminAdjustScore('1', -100)" class="btn btn-small" style="flex:1">🔴 -100</button>
+                    <button onclick="adminAdjustScore('1', 50)" class="btn btn-small" style="flex:1">🔴 +50</button>
+                    <button onclick="adminAdjustScore('1', -50)" class="btn btn-small" style="flex:1">🔴 -50</button>
+                </div>
+                <div style="display: flex; gap: 8px;">
+                    <button onclick="adminAdjustScore('2', 100)" class="btn btn-small" style="flex:1">🔵 +100</button>
+                    <button onclick="adminAdjustScore('2', -100)" class="btn btn-small" style="flex:1">🔵 -100</button>
+                    <button onclick="adminAdjustScore('2', 50)" class="btn btn-small" style="flex:1">🔵 +50</button>
+                    <button onclick="adminAdjustScore('2', -50)" class="btn btn-small" style="flex:1">🔵 -50</button>
                 </div>
             </div>
 

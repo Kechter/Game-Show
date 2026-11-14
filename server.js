@@ -225,12 +225,20 @@ io.on("connection", (socket) => {
 
   // --- Game Flow ---
 
-  socket.on("startGame", (gameType = "hotzone") => {
+  socket.on("startGame", (payload = "hotzone") => {
     if (!currentRoom) return;
+    const gameType =
+      typeof payload === "object" && payload !== null
+        ? payload.gameType || "hotzone"
+        : payload;
+    const requestedTheme =
+      typeof payload === "object" && payload !== null
+        ? payload.theme
+        : undefined;
     const room = gameManager.getRoom(currentRoom);
     const options = {};
     if (gameType === "jeopardy" && room) {
-      options.theme = room.jeopardyTheme || "allgemein";
+      options.theme = requestedTheme || room.jeopardyTheme || "allgemein";
     }
     const result = gameManager.startGame(currentRoom, gameType, options);
     if (result.error) {

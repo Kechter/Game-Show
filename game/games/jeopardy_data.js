@@ -4,6 +4,167 @@
  * Pro Spiel werden zufällig 5 Kategorien aus dem gewählten Thema gezogen.
  */
 const jeopardyThemes = {
+  // ===== GEBURTSTAG (Host-Only Quiz) =====
+  geburtstag: {
+    label: "🎂 Mama Geburtstag Quiz",
+    fixedOrder: true,
+    categories: [
+      {
+        name: "Familie",
+        questions: {
+          100: {
+            q: "Was ist keine Sache, die Carolin hasst?",
+            a: "Kamille",
+            options: ["Lavendel", "Kamille", "Zimt", "Nutella"],
+          },
+          200: {
+            q: "Wie alt sind alle Enkelkinder gemeinsam?",
+            a: "38",
+          },
+          300: {
+            q: "Wann ist der genaue Hochzeitstag von Hartmut und Carolin (Wochentag, Tag, Monat, Jahr)?",
+            a: "Freitag, der 13.08.2004",
+          },
+          400: {
+            q: "Welches lustige Wort hat Paul als Kleinkind statt „fertig“ immer gesagt?",
+            a: "Watzi",
+          },
+          500: {
+            q: "Von welchem langhaarigen Sänger hing ein Bild an Mamas Arbeitsplatz, das sie vor ihrer älteren Kollegin verstecken musste, weil sie ihn nicht sehen wollte?",
+            a: "David Lee Roth (Van Halen)",
+          },
+        },
+      },
+      {
+        name: "Challenges",
+        questions: {
+          100: {
+            q: "Was kann man mithilfe von folgendem Familienrezept herstellen?",
+            a: "Nusstaler",
+          },
+          200: {
+            q: "Erklärt zu dritt der vierten Person in eurem Team ein Wort, jeder darf der Reihe nach immer nur ein Wort sagen.",
+            a: "Challenge bestanden!",
+          },
+          300: {
+            q: "Erratet in 2 Minuten 10 Tabu-Karten-Begriffe.",
+            a: "Challenge bestanden!",
+          },
+          400: {
+            q: "Ordnet zu, auf welchem Foto man welches Baby sieht. Ihr dürft bei 8 Bildern nur einmal falsch liegen.",
+            a: "Challenge bestanden!",
+          },
+          500: {
+            q: "Sortiert die Bilder nach ihrem Alter. Wenn alle richtig sind, bekommt ihr die Punkte.",
+            a: "Challenge bestanden!",
+          },
+        },
+      },
+      {
+        name: "Essen & Trinken",
+        questions: {
+          100: {
+            q: "Welche Zutat wird beim fränkischen Sauerbraten traditionell zum Binden und Würzen der Soße verwendet?",
+            a: "Lebkuchen",
+          },
+          200: {
+            q: "Aus welchem Teil des Zimtbaums wird das Gewürz gewonnen?",
+            a: "Aus der Rinde",
+          },
+          300: {
+            q: "Wie heißt die italienische Spezialität aus Schweinebacke, die klassisch für echte Carbonara verwendet wird?",
+            a: "Guanciale",
+          },
+          400: {
+            q: "Welche Pflanze ist die Grundlage für die Herstellung von Tequila?",
+            a: "Blaue Agave",
+          },
+          500: {
+            q: "Safran besteht aus roten Fäden – aus welchen Blüten stammen sie?",
+            a: "Aus Safrankrokussen; verwendet werden die Narben der Blüten",
+          },
+        },
+      },
+      {
+        name: "Musik",
+        questions: {
+          100: {
+            q: "Nenne 5 Songs von Mark Forster.",
+            a: "z. B. Chöre, Ein Lied, Kogong, Übermorgen, 194 Länder",
+          },
+          200: {
+            q: "Aus welchem Land stammt K-Pop?",
+            a: "Südkorea",
+          },
+          300: {
+            q: "Welches ist das meistverkaufte Album aller Zeiten?",
+            a: "Thriller von Michael Jackson",
+          },
+          400: {
+            q: "Wie heißt dieses Lied und wer ist der Interpret?",
+            a: "Uptown Funk – Bruno Mars",
+          },
+          500: {
+            q: "Aus welchem Lied stammt folgender Text und wer hat es gesungen?: „I’m waking up to ash and dust, I wipe my brow and I sweat my rust.“",
+            a: "Radioactive von Imagine Dragons",
+          },
+        },
+      },
+      {
+        name: "Filme / Serien",
+        questions: {
+          100: {
+            q: "Wie heißt das bekannteste Lied aus dem Film „Die Eiskönigin“?",
+            a: "Let It Go / Lass jetzt los",
+          },
+          200: {
+            q: "Wer führte beim Film „Psycho“ aus dem Jahr 1960 Regie?",
+            a: "Alfred Hitchcock",
+          },
+          300: {
+            q: "In welchem Jahr erschien der erste Star-Wars-Film?",
+            a: "1977",
+            options: ["1974", "1975", "1977", "1980"],
+          },
+          400: {
+            q: "Was ist die bekannteste Netflix-Serie jemals (265,2 Millionen Aufrufe)?",
+            a: "Squid Game",
+            options: ["Wednesday", "Squid Game", "Adolescence", "Stranger Things"],
+          },
+          500: {
+            q: "Welches Instrument spielt Sebastian in „La La Land“ (2016)?",
+            a: "Klavier",
+          },
+        },
+      },
+      {
+        name: "Geografie",
+        questions: {
+          100: {
+            q: "Welcher ist der höchste Berg der Welt?",
+            a: "Mount Everest",
+          },
+          200: {
+            q: "Welches Gebirge trennt Europa von Asien?",
+            a: "Der Ural",
+          },
+          300: {
+            q: "Welches ist das kleinste Land Asiens?",
+            a: "Die Malediven",
+          },
+          400: {
+            q: "Welches Land hat die meisten Inseln der Welt?",
+            a: "Schweden (rund 267.570 Inseln)",
+          },
+          500: {
+            q: "Durch wie viele Länder fließt die Donau?",
+            a: "Zehn",
+          },
+        },
+      },
+    ],
+  },
+
   // ===== ALLGEMEIN (alle Kategorien gemischt) =====
   allgemein: {
     label: "🌍 Allgemeinwissen",
@@ -793,6 +954,7 @@ const jeopardyThemes = {
   // ===== STAMMTISCH =====
   stammtisch: {
     label: "🍻 Stammtisch",
+    fixedOrder: true,
     categories: [
       {
         name: "Allgemeinwissen",

@@ -226,7 +226,7 @@ class GameManager {
     // If the active player in Jeopardy left, advance turn
     if (room.gameInstance && room.gameType === "jeopardy") {
       if (room.gameInstance.state.activePlayerId === playerId) {
-        room.gameInstance.setNextActivePlayer();
+        room.gameInstance.setNextActiveTeam();
       }
     }
 
@@ -419,7 +419,7 @@ class GameManager {
     // If this was the active player in Jeopardy, advance turn
     if (room.gameInstance && room.gameType === "jeopardy") {
       if (room.gameInstance.state.activePlayerId === targetId) {
-        room.gameInstance.setNextActivePlayer();
+        room.gameInstance.setNextActiveTeam();
       }
       // Remove from scores
       delete room.gameInstance.state.scores[targetId];
@@ -438,13 +438,16 @@ class GameManager {
       // Clear current question if any, and advance
       if (room.gameInstance.state.currentQuestion) {
         const q = room.gameInstance.state.currentQuestion;
-        room.gameInstance.state.answeredQuestions[q.categoryName].push(
-          q.points,
-        );
+        room.gameInstance.state.answeredQuestions[q.categoryName].push({
+          points: parseInt(q.points),
+          teamId: room.gameInstance.state.activeTeamId,
+          correct: false,
+        });
+        room.gameInstance.state.answeredCount++;
         room.gameInstance.state.currentQuestion = null;
         room.gameInstance.state.roundPhase = "board";
       }
-      room.gameInstance.setNextActivePlayer();
+      room.gameInstance.setNextActiveTeam();
     }
 
     return { room };
@@ -471,12 +474,8 @@ class GameManager {
     if (!this.isAdmin(room, adminId)) return { error: "Keine Admin-Rechte" };
     if (!room.gameInstance) return { error: "Kein Spiel aktiv" };
 
-    if (room.gameType === "jeopardy") {
-      if (room.gameInstance.state.scores[targetId] !== undefined) {
-        room.gameInstance.state.scores[targetId] += amount;
-      }
-    } else if (room.gameType === "hotzone") {
-      // For Hotzone: targetId is the team number (1 or 2)
+    if (room.gameType === "jeopardy" || room.gameType === "hotzone") {
+      // targetId is the team number (1 or 2)
       const teamNum = parseInt(targetId);
       if (room.gameInstance.state.scores[teamNum] !== undefined) {
         room.gameInstance.state.scores[teamNum] += amount;

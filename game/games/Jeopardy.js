@@ -8,12 +8,17 @@ class JeopardyGame {
     // Get categories for the selected theme (fallback to allgemein)
     const themeData = jeopardyThemes[theme] || jeopardyThemes["allgemein"];
     const allCategories = themeData.categories;
+    const preserveOrder = !!themeData.fixedOrder;
 
-    // Pick 5 random categories from the theme pool
-    const shuffled = [...allCategories].sort(() => Math.random() - 0.5);
-    const rawCategories = shuffled.slice(0, 5);
+    // Keep all categories in exact order for fixed-order quizzes; otherwise pick 5
+    const rawCategories = preserveOrder
+      ? allCategories
+      : allCategories.length <= 5
+        ? allCategories.slice(0, 5)
+        : [...allCategories].sort(() => Math.random() - 0.5).slice(0, 5);
 
-    // For each category: pick 5 FRESH (unplayed) questions, remap to 100–500
+    // For each category: keep exact 100–500 mapping for fixedOrder / <=5 questions,
+    // or pick 5 FRESH questions while preserving relative difficulty order
     const pointValues = [100, 200, 300, 400, 500];
     const historyWarnings = []; // categories with critically low fresh question supply
 
@@ -21,19 +26,34 @@ class JeopardyGame {
     const pendingHistoryCommit = []; // [{ catName, questionTexts[] }]
 
     const selectedCategories = rawCategories.map((cat) => {
-      const allQuestions = Object.values(cat.questions);
+      const entries = Object.entries(cat.questions)
+        .map(([pts, q]) => ({ pts: parseInt(pts, 10), q }))
+        .sort((a, b) => a.pts - b.pts);
+
+      if (preserveOrder || entries.length <= 5) {
+        const remappedQuestions = {};
+        entries.forEach(({ pts, q }) => {
+          remappedQuestions[pts] = q;
+        });
+        pendingHistoryCommit.push({
+          catName: cat.name,
+          questionTexts: entries.map((e) => e.q.q),
+        });
+        return { ...cat, questions: remappedQuestions };
+      }
+
       const played = QuestionHistory.getPlayedQuestions(theme, cat.name);
 
       // Separate fresh vs. already-played questions
-      const fresh = allQuestions.filter(q => !played.has(q.q));
-      const stale = allQuestions.filter(q =>  played.has(q.q));
+      const fresh = entries.filter((e) => !played.has(e.q.q));
+      const stale = entries.filter((e) => played.has(e.q.q));
 
       // Warn if fresh supply is critically low
       if (fresh.length < 5) {
         historyWarnings.push({
           catName: cat.name,
           freshLeft: fresh.length,
-          total: allQuestions.length,
+          total: entries.length,
         });
       }
 
@@ -41,15 +61,19 @@ class JeopardyGame {
       const shuffledFresh = [...fresh].sort(() => Math.random() - 0.5);
       const shuffledStale = [...stale].sort(() => Math.random() - 0.5);
       const pool = [...shuffledFresh, ...shuffledStale];
-      const picked = pool.slice(0, 5);
+      // Preserve relative difficulty order across the 5 picked questions
+      const picked = pool.slice(0, 5).sort((a, b) => a.pts - b.pts);
 
       const remappedQuestions = {};
       pointValues.forEach((pts, i) => {
-        remappedQuestions[pts] = picked[i];
+        remappedQuestions[pts] = picked[i].q;
       });
 
       // Remember what we picked so we can save it on round completion
-      pendingHistoryCommit.push({ catName: cat.name, questionTexts: picked.map(q => q.q) });
+      pendingHistoryCommit.push({
+        catName: cat.name,
+        questionTexts: picked.map((e) => e.q.q),
+      });
 
       return { ...cat, questions: remappedQuestions };
     });
@@ -225,8 +249,10 @@ class JeopardyGame {
 
     if (isCorrect) {
       this.state.scores[this.state.activeTeamId] += points;
+    } else {
+      // Bei falscher Antwort verliert das Team die Hälfte der Punkte
+      this.state.scores[this.state.activeTeamId] -= Math.floor(points / 2);
     }
-    // Keine Punkteabzüge bei falscher Antwort, nur als gespielt markieren
 
     // Mark as answered
     this.state.answeredQuestions[this.state.currentQuestion.categoryName].push({
@@ -262,6 +288,8 @@ class JeopardyGame {
     const points = parseInt(this.state.currentQuestion.points);
     if (isCorrect) {
       this.state.scores[this.state.activeTeamId] += points;
+    } else {
+      this.state.scores[this.state.activeTeamId] -= Math.floor(points / 2);
     }
 
     this.state.answeredQuestions[this.state.currentQuestion.categoryName].push({
